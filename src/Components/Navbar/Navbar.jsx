@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../../Context/LanguageContext";
 import { useCart } from "../../Context/CartContext";
 
+
 const Navbar = () => {
   const { language, changeLanguage } = useLanguage();
   const { cart } = useCart();
@@ -22,15 +23,7 @@ const Navbar = () => {
           </div>
 
           <div className="d-flex align-items-center gap-3">
-            {/* Cart */}
-            <Link to="/cart" className="cart-icon position-relative">
-              <FaShoppingCart size={22} />
-              {cartCount > 0 && (
-                <span className="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+           
 
             {/* Login */}
             <Link to="/login" className="nav-link">
