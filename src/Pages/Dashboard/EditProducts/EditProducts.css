@@ -1,0 +1,41 @@
+.products-page {
+    max-width: 800px;
+    margin: auto;
+    background-color: #fdfdfd;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .products-page h2 {
+    font-weight: 700;
+    color: #093866;
+  }
+  
+  .form-section {
+    background-color: #f8f9fa;
+  }
+  
+  input.form-control {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  button.btn {
+    font-weight: bold;
+    font-size: 15px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button.btn:hover {
+    opacity: 0.9;
+  }
+  
+  table th, table td {
+    vertical-align: middle;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+  }

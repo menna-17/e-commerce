@@ -1,0 +1,17 @@
+/* Labels text color */
+.form-label {
+    color: #1e7ad6 !important;
+  }
+  
+  /* Custom button style */
+  .custom-signup-btn {
+    background-color: #093866 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    border: none !important;
+  }
+  
+  .custom-signup-btn:hover {
+    background-color: #07517d !important; /* optional darker hover */
+    color: rgba(255, 255, 255, 0.95) !important;
+  }
+  

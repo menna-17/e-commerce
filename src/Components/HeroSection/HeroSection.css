@@ -1,0 +1,60 @@
+.hero-container {
+  position: relative;
+}
+
+.carousel {
+  height: 500px; /* Very decreased height */
+  width: 100%; /* Make sure the carousel takes up the full width */
+  overflow: hidden; /* Hide any overflow if the image goes outside the container */
+}
+
+.carousel-inner {
+  height: 100%;
+}
+
+.carousel-item img {
+  width: 100%; /* Make the image take the full width */
+  height: 100%; /* Make the image take the full height of the carousel */
+  object-fit: cover; /* This ensures the image is cropped to cover the entire area */
+}
+
+
+.navbar-dropdown {
+  margin-top: 10px; /* or more if needed */
+}
+.carousel {
+  margin-top: 20px; /* Add space above the carousel */
+  height: 500px;
+  width: 100%;
+  overflow: hidden;
+}
+/* Remove Bootstrap's default arrow icons */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Custom left arrow */
+.carousel-control-prev-icon::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: solid #004666;
+  border-width: 0 3px 3px 0;
+  transform: rotate(135deg);
+}
+
+/* Custom right arrow */
+.carousel-control-next-icon::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: solid #004666;
+  border-width: 0 3px 3px 0;
+  transform: rotate(-45deg);
+}
