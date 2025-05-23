@@ -1,28 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import axiosInstance from "../../Apis/config.js"; // Uncomment when backend is ready
-import './OrdersPage.css';
+import React, { useEffect, useState } from "react";
+import styles from "./OrdersPage.module.css"; // ✅ import as module
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error] = useState(null);
-
-  /*
-  useEffect(() => {
-    axiosInstance
-      .get('/order')
-      .then((res) => {
-        setOrders(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching orders:', err);
-        setError('Failed to load orders');
-        setLoading(false);
-      });
-  }, []);
-  */
 
   useEffect(() => {
     const dummyOrders = [
@@ -36,14 +18,14 @@ function OrdersPage() {
     }, 500);
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="text-center mt-5">Loading...</div>;
+  if (error) return <div className="text-danger text-center">{error}</div>;
 
   return (
-    <div className="orders-page-container">
+    <div className={styles.ordersPageContainer}>
       <h2 className="mb-4">View Orders</h2>
-      <table className="table table-striped custom-table">
-        <thead className='table-dark'>
+      <table className={`table table-striped ${styles.customTable}`}>
+        <thead>
           <tr>
             <th>#</th>
             <th>Customer</th>
@@ -65,7 +47,9 @@ function OrdersPage() {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center">No orders found.</td>
+              <td colSpan="5" className="text-center">
+                No orders found.
+              </td>
             </tr>
           )}
         </tbody>

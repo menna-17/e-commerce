@@ -1,35 +1,32 @@
 .featured-product-sidebar {
   position: relative;
-  width: 100vw;     /* full viewport width */
-  left: 0;          /* align to very left */
-  margin: 20px 0 0 0;  /* top margin only */
+  width: 100vw;
+  left: 0;
+  margin: 20px 0 80px 40px;
   box-sizing: border-box;
-
   padding: 20px;
   background-color: transparent;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
 }
 
 .featured-product-sidebar h2 {
   font-weight: 700;
-  font-size: 1.8rem;
+  font-size: 35px;
   margin-bottom: 20px;
   color: #004666;
   text-align: left;
-  /* font-family inherited */
 }
 
 .product-list {
   display: flex;
   flex-direction: row;
-  gap: 30px; /* Reduced gap a bit */
+  gap: 30px;
   overflow-x: auto;
-  padding-bottom: 10px;
+  padding-bottom: 25px;
   scrollbar-width: thin;
-  scrollbar-color: #0077b6 transparent;
+  scrollbar-color:  #093866 transparent;
 }
 
 .product-list::-webkit-scrollbar {
@@ -43,9 +40,9 @@
 
 .product-card {
   flex: 0 0 auto;
-  width: 240px; /* Increased width for better text fit */
+  width: 240px;
   cursor: pointer;
-  padding: 10px;
+  padding: 30px;
   border-radius: 8px;
   background-color: #ffffff;
   box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
@@ -56,7 +53,6 @@
   align-items: center;
   transform-origin: center;
   will-change: transform;
-
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
 }
 
@@ -64,30 +60,60 @@
   transform: scale(1.05);
 }
 
-.product-price {
-  font-weight: 500;
-  font-size: 20px;
-  color: #5c5f61;
-
-  font-family: 'Josefin Sans', 'Overpass', sans-serif;
-}
-
 .product-image {
   width: 100%;
   height: 160px;
   border-radius: 6px;
   object-fit: cover;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards ease-in;
+}
+
+/* Updated styles for price container like in NewArrivals */
+.priceContainer {
+  display: inline-flex;
+  align-items: flex-end;
+}
+
+.product-price {
+  font-size: 30px;
+  font-weight: 500;
+  color: #444;
+  margin: 4px 0 0 0;
+  text-align: left;
+  font-family: 'Josefin Sans', 'Overpass', sans-serif;
+}
+
+.currency {
+  font-size: 15px;
+  color: #444;
+  margin-left: 4px;
 }
 
 .product-title {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 25px;
   color: #093866;
   margin: 0 0 5px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
+}
+
+/* For loading and error text */
+.statusMessage {
+  font-family: 'Josefin Sans', 'Overpass', sans-serif;
+  text-align: center;
+  padding: 30px 0;
+  color: #093866;
+  font-weight: 600;
+  font-size: 1.2rem; 
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }

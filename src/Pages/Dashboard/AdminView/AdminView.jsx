@@ -1,25 +1,42 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../Apis/config.js";
+import styles from "./AdminView.module.css";
 
 function AdminView() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({ title: "", price: "", category: "" });
+  const [editData, setEditData] = useState({
+    title: "",
+    price: "",
+    category: "",
+  });
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
+    setLoading(true);
     axiosInstance
-      .get("/products")
+      .get(`/api/products?page=${page}`)
       .then((res) => {
-        setProducts(res.data.products);
+        const data = res.data;
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else if (data.data && Array.isArray(data.data.products)) {
+          setProducts(data.data.products);
+        } else {
+          throw new Error("Unexpected API response structure");
+        }
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message || "Error fetching products");
+        setError("Error fetching products");
         setLoading(false);
+        console.error("Error fetching products:", err);
       });
-  }, []);
+  }, [page]);
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
@@ -67,6 +84,7 @@ function AdminView() {
         Loading products...
       </div>
     );
+
   if (error)
     return (
       <div className="d-flex justify-content-center align-items-center vh-100 text-danger">
@@ -75,77 +93,74 @@ function AdminView() {
     );
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center bg-light p-4"
-      style={{ minHeight: "calc(100vh - 56px)" }} // space below navbar (adjust if your navbar height differs)
-    >
-      <div className="w-100" style={{ maxWidth: "900px" }}>
-        <h1 className="text-center mb-4">Admin - Products</h1>
-        <table className="table table-bordered table-hover bg-white shadow-sm rounded">
-          <thead className="table-light">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.id}</td>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Admin - Products</h1>
+      <table className={`table table-bordered table-hover table-striped ${styles.table}`}>
+        <thead className={styles.tableHead}>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id}>
+              <td className={styles.tableCell}>{product.id}</td>
 
-                {editId === product.id ? (
-                  <>
-                    <td>
-                      <input
-                        type="text"
-                        name="title"
-                        value={editData.title}
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        name="price"
-                        value={editData.price}
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        name="category"
-                        value={editData.category}
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td>${product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.title}</td>
-                  </>
-                )}
+              {editId === product.id ? (
+                <>
+                  <td className={styles.tableCell}>
+                    <input
+                      type="text"
+                      name="title"
+                      value={editData.title}
+                      onChange={handleChange}
+                      className={`form-control ${styles.input}`}
+                    />
+                  </td>
+                  <td className={styles.tableCell}>
+                    <input
+                      type="number"
+                      name="price"
+                      value={editData.price}
+                      onChange={handleChange}
+                      className={`form-control ${styles.input}`}
+                    />
+                  </td>
+                  <td className={styles.tableCell}>
+                    <input
+                      type="text"
+                      name="category"
+                      value={editData.category}
+                      onChange={handleChange}
+                      className={`form-control ${styles.input}`}
+                    />
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className={styles.tableCell}>{product.title}</td>
+                  <td className={styles.tableCell}>${product.price}</td>
+                  <td className={styles.tableCell}>{product.category}</td>
+                </>
+              )}
 
-                <td className="d-flex gap-2">
+              <td className={styles.tableCell}>
+                <div className={styles.actionButtons}>
                   {editId === product.id ? (
                     <>
                       <button
                         onClick={() => handleSave(product.id)}
-                        className="btn btn-success"
+                        className={`btn ${styles.btnSuccess}`}
                       >
                         Save
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="btn btn-warning text-white"
+                        className={`btn ${styles.btnWarning}`}
                       >
                         Cancel
                       </button>
@@ -154,24 +169,24 @@ function AdminView() {
                     <>
                       <button
                         onClick={() => handleEdit(product)}
-                        className="btn btn-primary"
+                        className={`btn btn-sm ${styles.btnWarning}`}
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(product.id)}
-                        className="btn btn-danger"
+                        className={`btn btn-sm ${styles.btnDanger}`}
                       >
                         Delete
                       </button>
                     </>
                   )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

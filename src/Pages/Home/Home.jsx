@@ -3,16 +3,15 @@ import HeroSection from '../../Components/HeroSection/HeroSection';
 import FeaturedProducts from '../../Components/FeaturedProducts/FeaturedProducts';
 import NewArrivals from '../../Components/NewArrivals/NewArrivals';
 import ShopByCategory from '../../Components/ShopByCategory/ShopByCategory';
+import styles from './Home.module.css'; // Import the CSS module
 
 const Home = () => {
   return (
-    <div>
-      
+    <div className={styles.container}>
       <HeroSection />
-      <NewArrivals/>
-      <ShopByCategory/>
+      <NewArrivals />
+      <ShopByCategory />
       <FeaturedProducts />
-    
     </div>
   );
 };

@@ -1,52 +1,84 @@
-// src/Components/NewArrivals/NewArrivals.jsx
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../../Apis/config";
-import { useNavigate } from "react-router-dom";
-import "./NewArrivals.css";
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '../../Apis/config';
+import { useNavigate } from 'react-router-dom';
+import styles from './NewArrivals.module.css';
 
 const NewArrivals = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance
-      .get("/products?limit=4&skip=10") // fetch 4 products
-      .then((res) => setProducts(res.data.products))
-      .catch((err) => console.error(err));
+    const fetchProducts = async () => {
+      try {
+        const response = await axiosInstance.get('/api/products?limit=4&page=1');
+        const data = response.data;
+
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else if (data.data && Array.isArray(data.data.products)) {
+          setProducts(data.data.products);
+        } else {
+          throw new Error('Unexpected API response structure');
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setError('Error fetching products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
+  if (loading) return <p className={styles.statusMessage}>Loading new arrivals...</p>;
+  if (error) return <p className={styles.statusMessage}>{error}</p>;
+
   return (
-    <section className="new-arrivals-section">
-      <h2 className="section-title">New Arrivals</h2>
-      <div className="new-arrivals-products-container">
-        {products.map((product) => (
-          <div
-            className="new-arrivals-product-wrapper"
-            key={product.id}
-            onClick={() => navigate(`/product/${product.id}`)}
-            role="button"
-            tabIndex={0}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") navigate(`/product/${product.id}`);
-            }}
-          >
-            <div className="new-arrivals-product-card">
-              <img
-                src={product.thumbnail}
-                alt={product.title}
-                className="new-arrivals-image"
-                loading="lazy"
-              />
+    <section className={styles.newArrivalsSection}>
+      <h2 className={styles.sectionTitle}>New Arrivals</h2>
+      <div className={styles.newArrivalsProductsContainer}>
+        {products.map((product) => {
+          const id = product.id || product._id;
+          const imgSrc = product.thumbnail || product.image || product.images?.[0] || '/default-product.jpg';
+
+          return (
+            <div
+              className={styles.newArrivalsProductWrapper}
+              key={id}
+              onClick={() => navigate(`/product/${id}`)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && navigate(`/product/${id}`)}
+            >
+              <div className={styles.newArrivalsProductCard}>
+                <img
+                  src={imgSrc}
+                  alt={product.title || 'Product'}
+                  className={styles.newArrivalsImage}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src = '/default-product.jpg';
+                  }}
+                />
+              </div>
+              <div className={styles.newArrivalsInfo}>
+                <p className={styles.newArrivalsTitle}>{product.title}</p>
+                <div className={styles.priceContainer}>
+                  <p className={styles.newArrivalsPrice}>{product.price}</p>
+                  <span className={styles.currency}>EGP</span>
+                </div>
+              </div>
             </div>
-            <div className="new-arrivals-info">
-              <p className="new-arrivals-title">{product.title}</p>
-              <p className="new-arrivals-price">${product.price}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
 };
 
-export default NewArrivals;
+export default React.memo(NewArrivals);

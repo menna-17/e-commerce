@@ -1,33 +1,63 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create the Cart Context
 const CartContext = createContext();
 
-// Create a custom hook to use the CartContext
-export const useCart = () => {
-  return useContext(CartContext);
-};
+export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  // Add product to cart
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
+    const productId = product._id || product.id;
+
+    setCart((prevCart) => {
+      const existingProduct = prevCart.find(
+        (item) => (item._id || item.id) === productId
+      );
+
+      if (existingProduct) {
+        // Increase quantity by 1, but do not exceed stock
+        const stock = product.instock ?? product.stock ?? product.quantity ?? Infinity;
+        if ((existingProduct.quantity || 1) >= stock) return prevCart;
+
+        return prevCart.map((item) =>
+          (item._id || item.id) === productId
+            ? { ...item, quantity: (item.quantity || 1) + 1 }
+            : item
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: 1 }];
+      }
+    });
   };
 
-  // Remove product from cart
   const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((product) => product.id !== productId));
+    setCart((prevCart) =>
+      prevCart.filter((product) => (product._id || product.id) !== productId)
+    );
   };
 
-  // Calculate the total price of items in the cart
   const calculateTotal = () => {
-    return cart.reduce((total, product) => total + product.price, 0).toFixed(2);
+    return cart
+      .reduce(
+        (total, product) =>
+          total + (Number(product.price) || 0) * (product.quantity || 1),
+        0
+      )
+      .toFixed(2);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, calculateTotal }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, calculateTotal }}
+    >
       {children}
     </CartContext.Provider>
   );

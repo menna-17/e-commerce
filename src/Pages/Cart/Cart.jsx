@@ -1,52 +1,61 @@
 import React from 'react';
 import { useCart } from '../../Context/CartContext';
 import { Link } from 'react-router-dom';
+import styles from './CartPage.module.css';
 
 const CartPage = () => {
   const { cart, removeFromCart, calculateTotal } = useCart();
 
   return (
-    <div className="cart-page container py-4">
-      <h2>Your Cart</h2>
-      
+    <div className={styles.cartPage}>
+      <h2 className={styles.title}>Your Cart</h2>
+
       {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className={styles.emptyMessage}>Your cart is empty.</p>
       ) : (
         <div>
-          {/* Cart Items */}
-          <div className="cart-items">
-            {cart.map((product) => (
-              <div key={product.id} className="cart-item d-flex justify-content-between align-items-center mb-3">
-                <div className="d-flex align-items-center">
-                  <img
-                    src={product.thumbnail || product.img}
-                    alt={product.title}
-                    className="img-thumbnail"
-                    width="100"
-                  />
-                  <div className="ms-3">
-                    <p className="mb-0">{product.title}</p>
-                    <p className="mb-0">${product.price}</p>
+          <div className={styles.cartItems}>
+            {cart.map((product) => {
+              const productId = product._id || product.id;
+              const imgSrc = product.image || product.images?.[0] || product.thumbnail || '/default-product.jpg';
+
+              return (
+                <div key={productId} className={styles.cartItem}>
+                  <div className={styles.itemDetails}>
+                    <img
+                      src={imgSrc}
+                      alt={product.title}
+                      className={styles.thumbnail}
+                      onError={(e) => (e.target.src = '/default-product.jpg')}
+                    />
+                    <div className={styles.itemText}>
+                      <p className={styles.productTitle}>{product.title}</p>
+                      <p className={styles.productPrice}>
+                        ${product.price} x {product.quantity}
+                      </p>
+                      <p className={styles.productTotalPrice}>
+                        Total: ${(product.price * product.quantity).toFixed(2)}
+                      </p>
+                    </div>
                   </div>
+                  <button
+                    className={styles.removeButton}
+                    onClick={() => removeFromCart(productId)}
+                  >
+                    Remove
+                  </button>
                 </div>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => removeFromCart(product.id)}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Cart Summary */}
-          <div className="cart-summary mt-4">
-            <h4>Total Price: ${calculateTotal()}</h4>
-            <div className="d-flex justify-content-between">
-              <Link to="/product-list" className="btn btn-secondary">
+          <div className={styles.cartSummary}>
+            <h4 className={styles.totalPrice}>Total Price: ${calculateTotal()}</h4>
+            <div className={styles.actions}>
+              <Link to="/product-list" className={styles.continueShopping}>
                 Continue Shopping
               </Link>
-              <Link to="/checkout" className="btn btn-primary">
+              <Link to="/checkout" className={styles.checkoutButton}>
                 Checkout
               </Link>
             </div>

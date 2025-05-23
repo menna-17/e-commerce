@@ -1,2 +1,24 @@
 /* src/index.css */
 
+/* Make sure html and body take full height */
+/* index.css or global.css */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  
+  
+  /* Your app content should grow to fill available space */
+  body > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Optional: make sure Footer doesn't shrink */
+  footer {
+    margin-top: auto;
+  }
+  

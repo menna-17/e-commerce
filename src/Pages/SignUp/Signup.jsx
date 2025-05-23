@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./signup.css";
+import styles from "./Signup.module.css";
 
 function Signup() {
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ function Signup() {
 
   const handleSignup = (e) => {
     e.preventDefault();
-
     let formErrors = {};
 
     if (!firstName.trim()) formErrors.firstName = "First name is required.";
@@ -46,18 +45,13 @@ function Signup() {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
-      <div
-        className="card shadow-lg p-5 border-0 rounded-4"
-        style={{ maxWidth: "500px", width: "100%" }}
-      >
-        <h2 className="text-center mb-4 fw-bold text-primary">
-          Create Account
-        </h2>
+    <div className={styles.signupContainer}>
+      <div className={styles.signupCard}>
+        <h2 className="text-center mb-4 fw-bold ">Create Account</h2>
         <form onSubmit={handleSignup} noValidate>
           <div className="row">
             <div className="col-md-6 mb-3">
-              <label className="form-label">First Name</label>
+              <label className={styles.formLabel}>First Name</label>
               <input
                 type="text"
                 className={`form-control form-control-lg rounded-3 ${
@@ -75,7 +69,7 @@ function Signup() {
             </div>
 
             <div className="col-md-6 mb-3">
-              <label className="form-label">Last Name</label>
+              <label className={styles.formLabel}>Last Name</label>
               <input
                 type="text"
                 className={`form-control form-control-lg rounded-3 ${
@@ -94,7 +88,7 @@ function Signup() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">Email address</label>
+            <label className={styles.formLabel}>Email address</label>
             <input
               type="email"
               className={`form-control form-control-lg rounded-3 ${
@@ -112,7 +106,7 @@ function Signup() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">Role</label>
+            <label className={styles.formLabel}>Role</label>
             <select
               className={`form-select form-select-lg rounded-3 ${
                 errors.role ? "is-invalid" : ""
@@ -133,7 +127,7 @@ function Signup() {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">Password</label>
+            <label className={styles.formLabel}>Password</label>
             <input
               type="password"
               className={`form-control form-control-lg rounded-3 ${
@@ -151,7 +145,7 @@ function Signup() {
           </div>
 
           <div className="mb-4">
-            <label className="form-label">Confirm Password</label>
+            <label className={styles.formLabel}>Confirm Password</label>
             <input
               type="password"
               className={`form-control form-control-lg rounded-3 ${
@@ -170,7 +164,7 @@ function Signup() {
 
           <button
             type="submit"
-            className="btn custom-signup-btn btn-lg w-100 rounded-3 shadow-sm"
+            className={`btn btn-lg w-100 rounded-3 shadow-sm ${styles.customSignupBtn}`}
           >
             Sign Up
           </button>

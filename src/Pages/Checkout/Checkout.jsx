@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../../Context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import styles from './Checkout.module.css';
 
 const egyptGovernorates = [
   "Cairo", "Giza", "Alexandria", "Dakahlia", "Red Sea", "Beheira", "Fayoum",
@@ -44,128 +45,106 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container py-4">
-   
-
-      <form onSubmit={handleSubmit}>
-
-        {/* Contact Section */}
-        <h4>Contact </h4>
-        <div className="mb-3">
+    <div className={styles.checkoutContainer}>
+      <form onSubmit={handleSubmit} className={styles.checkoutForm}>
+        <h2 className={styles.sectionTitle}>Contact</h2>
+        <div className={styles.formGroup}>
           <label>Email:</label>
-          <input type="email" name="email" className="form-control" required onChange={handleChange} />
+          <input type="email" name="email" required onChange={handleChange} />
         </div>
 
-        {/* Delivery Section */}
-        <h4>Delivery </h4>
-        <div className="mb-3">
+        <h2 className={styles.sectionTitle}>Delivery</h2>
+        <div className={styles.formGroup}>
           <label>Country/Region:</label>
-          <input type="text" name="country" className="form-control" value="Egypt" readOnly />
+          <input type="text" name="country" value="Egypt" readOnly />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>First Name:</label>
-          <input type="text" name="firstName" className="form-control" required onChange={handleChange} />
+          <input type="text" name="firstName" required onChange={handleChange} />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>Last Name:</label>
-          <input type="text" name="lastName" className="form-control" required onChange={handleChange} />
+          <input type="text" name="lastName" required onChange={handleChange} />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>Address:</label>
-          <input type="text" name="address" className="form-control" required onChange={handleChange} />
+          <input type="text" name="address" required onChange={handleChange} />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>Apartment (optional):</label>
-          <input type="text" name="apartment" className="form-control" onChange={handleChange} />
+          <input type="text" name="apartment" onChange={handleChange} />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>City:</label>
-          <input type="text" name="city" className="form-control" required onChange={handleChange} />
+          <input type="text" name="city" required onChange={handleChange} />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>Governorate:</label>
-          <select name="governorate" className="form-control" required onChange={handleChange}>
+          <select name="governorate" required onChange={handleChange}>
             <option value="">Select Governorate</option>
             {egyptGovernorates.map((gov, idx) => (
               <option key={idx} value={gov}>{gov}</option>
             ))}
           </select>
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>Postal Code:</label>
-          <input type="text" name="postalCode" className="form-control" required onChange={handleChange} />
+          <input type="text" name="postalCode" required onChange={handleChange} />
         </div>
-
-        <div className="mb-3">
+        <div className={styles.formGroup}>
           <label>Phone:</label>
-          <input type="text" name="phone" className="form-control" required onChange={handleChange} />
+          <input type="text" name="phone" required onChange={handleChange} />
         </div>
 
-        {/* Payment Section */}
-        <h4>Payment Method</h4>
-        <div className="mb-3">
-          <select name="paymentMethod" className="form-control" value={form.paymentMethod} onChange={handleChange}>
+        <h2 className={styles.sectionTitle}>Payment Method</h2>
+        <div className={styles.formGroup}>
+          <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange}>
             <option value="Cash on Delivery">Cash on Delivery</option>
             <option value="Card">Debit/Credit Card</option>
-            
           </select>
         </div>
 
-        {/* Conditionally show payment inputs */}
         {form.paymentMethod === 'Card' && (
-          <div>
-            <div className="mb-3">
+          <>
+            <div className={styles.formGroup}>
               <label>Card Number:</label>
-              <input type="text" name="cardNumber" className="form-control" onChange={handleChange} required />
+              <input type="text" name="cardNumber" onChange={handleChange} required />
             </div>
-
-            <div className="mb-3">
+            <div className={styles.formGroup}>
               <label>Cardholder Name:</label>
-              <input type="text" name="cardName" className="form-control" onChange={handleChange} required />
+              <input type="text" name="cardName" onChange={handleChange} required />
             </div>
-
-            <div className="mb-3">
+            <div className={styles.formGroup}>
               <label>Expiry Date:</label>
-              <input type="text" name="expiry" placeholder="MM/YY" className="form-control" onChange={handleChange} required />
+              <input type="text" name="expiry" placeholder="MM/YY" onChange={handleChange} required />
             </div>
-
-            <div className="mb-3">
+            <div className={styles.formGroup}>
               <label>CVV:</label>
-              <input type="text" name="cvv" className="form-control" onChange={handleChange} required />
+              <input type="text" name="cvv" onChange={handleChange} required />
             </div>
-          </div>
+          </>
         )}
 
-      {/* Order Summary */}
-<h4>Order Summary</h4>
-<ul className="list-group mb-3">
-  {cart.map((item, index) => (
-    <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-      <div className="d-flex align-items-center">
-        <img 
-          src={item.images ? item.images : item.thumbnail} 
-          alt={item.title} 
-          style={{ width: '50px', height: '50px', objectFit: 'cover', marginRight: '10px', borderRadius: '4px' }} 
-        />
-        <span>{item.title}</span>
-      </div>
-      <span>${item.price}</span>
-    </li>
-  ))}
-  <li className="list-group-item d-flex justify-content-between">
-    <strong>Total</strong> <strong>${totalPrice}</strong>
-  </li> 
-</ul>
+        <h2 className={styles.sectionTitle}>Order Summary</h2>
+        <ul className={styles.orderSummary}>
+          {cart.map((item, index) => (
+            <li key={index} className={styles.summaryItem}>
+              <div className={styles.itemDetails}>
+                <img 
+                  src={item.images ? item.images : item.thumbnail} 
+                  alt={item.title} 
+                />
+                <span>{item.title}</span>
+              </div>
+              <span>${item.price}</span>
+            </li>
+          ))}
+          <li className={styles.total}>
+            <strong>Total</strong> <strong>${totalPrice}</strong>
+          </li>
+        </ul>
 
-
-        <button type="submit" className="btn btn-success w-100">Place Order</button>
+        <button type="submit" className={styles.submitButton}>Place Order</button>
       </form>
     </div>
   );

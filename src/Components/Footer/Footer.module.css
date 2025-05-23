@@ -1,0 +1,44 @@
+
+/* Row container for label + icons */
+.contact-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px; /* More space between 'Contact Us' and icons */
+  margin-top: 1.5rem;
+}
+
+/* 'Contact Us' text */
+.contact-label {
+  font-weight: bold;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Icon container */
+.contact-icons {
+  display: flex;
+  gap: 20px;
+  font-size: 18px;
+}
+
+/* Individual icons */
+.contact-icons svg {
+  color: rgba(255, 255, 255, 0.95);
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover effect */
+.contact-icons svg:hover {
+  color: #efeaeac4;
+}
+
+.custom-footer {
+  background-color: #093866;
+  color: rgba(255, 255, 255, 0.95);
+  padding: 1rem 0;
+  text-align: center;
+  margin-top: auto;
+}
+

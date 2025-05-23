@@ -1,0 +1,126 @@
+.cartPage,
+.cartPage * {
+  font-family: 'Josefin Sans', 'Overpass', sans-serif;
+  color: #093866;
+}
+
+.cartPage {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.emptyMessage {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.cartItems {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fdfdfd;
+}
+
+.itemDetails {
+  display: flex;
+  align-items: center;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.itemText {
+  margin-left: 30px;
+}
+
+.productTitle {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.productPrice {
+  font-size: 1rem;
+  color: #5c5f61;
+}
+
+.removeButton {
+  background-color: #093866;
+  color: rgba(245, 248, 248, 0.9);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.removeButton:hover {
+  background-color: #dc3545;
+}
+
+.cartSummary {
+  margin-top: 40px;
+  text-align: right;
+}
+
+.totalPrice {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.continueShopping,
+.checkoutButton {
+  text-decoration: none;
+  padding: 10px 18px;
+  font-weight: 600;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.continueShopping {
+  background-color: #6c757d;
+  color: rgba(245, 248, 248, 0.9);
+}
+
+.continueShopping:hover {
+  background-color: #555758;
+}
+
+.checkoutButton {
+  background-color: #093866;
+  color: rgba(245, 248, 248, 0.9);
+}
+
+.checkoutButton:hover {
+  background-color: #04213f;
+}

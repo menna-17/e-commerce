@@ -1,14 +1,12 @@
-// src/Components/HeroSection/HeroSection.jsx
 import React from 'react';
-import './HeroSection.css'; // Optional: your custom styles
+import styles from './HeroSection.module.css';  // Import CSS Module
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
-    <div className="hero-container">
-      {/* Bootstrap Carousel with auto-slide */}
-      <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-inner">
+    <div className={styles['hero-container']}>
+      <div id="carouselExample" className={`carousel slide ${styles.carousel}`} data-bs-ride="carousel">
+        <div className={`carousel-inner ${styles['carousel-inner']}`}>
           <div className="carousel-item active">
             <img src="h1.jpg" className="d-block w-100" alt="First slide" />
           </div>
@@ -20,7 +18,6 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Carousel Controls */}
         <button
           className="carousel-control-prev"
           type="button"
@@ -40,8 +37,6 @@ const HeroSection = () => {
           <span className="visually-hidden">Next</span>
         </button>
       </div>
-
-     
     </div>
   );
 };

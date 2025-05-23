@@ -1,0 +1,118 @@
+.newArrivalsSection {
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 20px 40px;
+  margin: 40px 0;
+  font-family: 'Josefin Sans', 'Overpass', sans-serif;
+  background-color: transparent;
+}
+
+.sectionTitle {
+  font-weight: 700;
+  font-size: 35px;
+  margin-bottom: 30px;
+  color: #093866;
+  text-align: left;
+}
+
+.newArrivalsProductsContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.newArrivalsProductsContainer::-webkit-scrollbar-thumb {
+  background-color: #093866;
+  border-radius: 3px;
+}
+
+.newArrivalsProductWrapper {
+  cursor: pointer;
+  outline: none;
+  max-width: 200px;
+  flex-shrink: 0;
+}
+
+.newArrivalsProductWrapper:focus {
+  box-shadow: 0 0 0 3px #00466666;
+  border-radius: 6px;
+}
+
+.newArrivalsProductCard {
+  width: 250px;
+  height: 280px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.15);
+  transition: transform 0.3s ease;
+  background-color: white;
+  font-family: 'Josefin Sans', 'Overpass', sans-serif;
+  margin-left: 150px;
+}
+
+.newArrivalsProductCard:hover {
+  transform: scale(1.05);
+}
+
+.newArrivalsImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.newArrivalsInfo {
+  margin-top: 8px;
+  text-align: left;
+  padding: 8px 0 0 150px;
+}
+
+.newArrivalsTitle {
+  font-size: 25px;
+  font-weight: 600;
+  color: #093866;
+  margin: 0;
+  text-align: left;
+  /* Removed ellipsis/truncation to show full title */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.priceContainer {
+  display: inline-flex;
+  align-items: flex-end;
+}
+
+.newArrivalsPrice {
+  font-size: 30px;
+  font-weight: 500;
+  color: #444;
+  margin: 4px 0 0 0;
+  text-align: left;
+}
+
+.currency {
+  font-size: 15px;
+  color: #444;
+  margin-left: 4px;
+}
+
+.newArrivalsProductsContainer {
+  display: flex;
+  gap: 80px;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #093866 transparent;
+}
+
+.new-arrivals-list {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  overflow-x: auto;
+  padding-bottom: 25px;
+  scrollbar-width: thin;
+  scrollbar-color: #093866 transparent;
+}

@@ -18,26 +18,30 @@ const OrdersPage = lazy(() => import('./Pages/Dashboard/OrdersPage/OrdersPage'))
 const AdminView = lazy(() => import('./Pages/Dashboard/AdminView/AdminView'));
 const NotFound = lazy(() => import('./Pages/NotFound/NotFound'));
 
-// Layout with Navbar and Footer
 const LayoutWithNavbarFooter = ({ Component }) => (
-  <>
+  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <Navbar />
-    <Suspense fallback={<div>Loading...</div>}>
-      <Component />
-    </Suspense>
+    <main style={{ flex: 1 }}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Component />
+      </Suspense>
+    </main>
     <Footer />
-  </>
+  </div>
 );
 
-// Layout with Footer only (no Navbar)
 const LayoutWithFooterOnly = ({ Component }) => (
-  <>
-    <Suspense fallback={<div>Loading...</div>}>
-      <Component />
-    </Suspense>
+  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <main style={{ flex: 1 }}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Component />
+      </Suspense>
+    </main>
     <Footer />
-  </>
+  </div>
 );
+
+
 
 const App = () => {
   return (

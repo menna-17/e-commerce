@@ -1,7 +1,9 @@
+/* Navbar.module.css */
+
 /* ===========================
    Global page background
 =========================== */
-body {
+:global(body) {
   background-color: #c7d5e1 !important;
   font-family: 'Josefin Sans', sans-serif;
 }
@@ -9,13 +11,13 @@ body {
 /* ===========================
    Top Navbar Styles
 =========================== */
-.top-navbar {
+.topNavbar {
   background-color: #093866 !important;
 }
 
-.top-navbar a.nav-link,
-.top-navbar .navbar-brand,
-.top-navbar .cart-icon {
+.topNavbarLink,
+.topNavbarBrand,
+.cartIcon {
   color: rgba(245, 248, 248, 0.9) !important;
   text-decoration: none;
   transition: color 0.3s ease;
@@ -25,9 +27,9 @@ body {
   font-size: 15px;
 }
 
-.top-navbar a.nav-link:hover,
-.top-navbar .navbar-brand:hover,
-.top-navbar .cart-icon:hover {
+.topNavbarLinkHover:hover,
+.topNavbarBrandHover:hover,
+.cartIconHover:hover {
   color: #efeaeac4 !important;
   text-decoration: none;
 }
@@ -35,41 +37,42 @@ body {
 /* ===========================
    Bottom Navbar Styles
 =========================== */
-.bottom-navbar {
+.bottomNavbar {
   background-color: #c7d5e1 !important;
   margin-top: 10px;
+  margin-bottom: 20px; /* Add space below the navbar */
   padding: 0.5rem 0;
 }
 
-.nav-link {
+.navLink {
   color: #093866 !important;
   text-decoration: none;
   transition: color 0.3s ease;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 500;
   letter-spacing: 0.5px;
-  font-size: 15px;
+  font-size: 20px !important;
 }
 
-.bottom-navbar .nav-link:hover {
-  color: #0046669c !important;
+.navLinkHover:hover {
+  color: grey !important;
   text-decoration: none;
 }
 
-.bottom-navbar .navbar-nav {
+.bottomNavbarNav {
   margin: 0 auto;
   display: flex;
   justify-content: center;
 }
 
-.bottom-navbar .navbar-nav .nav-item {
+.bottomNavbarNavItem {
   margin: 0 20px;
 }
 
 /* ===========================
    Dashboard Button
 =========================== */
-.dashboard-btn {
+.dashboardBtn {
   background-color: #d9e2e9 !important;
   color: #004666 !important;
   border: none !important;
@@ -78,8 +81,8 @@ body {
   font-weight: 500;
 }
 
-.dashboard-btn:hover,
-.dashboard-btn:focus {
+.dashboardBtnHover:hover,
+.dashboardBtnFocus:focus {
   background-color: #efeaeac4 !important;
   color: #004666 !important;
   box-shadow: none !important;
@@ -89,13 +92,13 @@ body {
 /* ===========================
    Dropdown Menu (Dashboard)
 =========================== */
-.dropdown-menu {
+.dropdownMenu {
   background-color: #efeaeae6 !important;
   border: none !important;
   padding: 0.5rem 0 !important;
 }
 
-.dropdown-menu .dropdown-item {
+.dropdownMenuItem {
   background-color: transparent !important;
   color: #004666 !important;
   padding: 0.5rem 1.25rem !important;
@@ -105,14 +108,14 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.dropdown-menu .dropdown-item:hover {
+.dropdownMenuItemHover:hover {
   background-color: #3432321c !important;
 }
 
 /* ===========================
    Language Selector
 =========================== */
-.lang-selector {
+.langSelector {
   background-color: #d9e2e9 !important;
   color: #004666 !important;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -120,8 +123,8 @@ body {
   font-family: 'Josefin Sans', sans-serif;
 }
 
-.lang-selector:hover,
-.lang-selector:focus {
+.langSelectorHover:hover,
+.langSelectorFocus:focus {
   background-color: #efeaeac4 !important;
   color: #004666 !important;
   outline: none !important;
@@ -131,44 +134,41 @@ body {
 /* ===========================
    Hover Dropdown for "Products"
 =========================== */
-.dropdown-nav {
+.dropdownNav {
   position: relative;
 }
 
-.product-nav-dropdown {
+.productNavDropdown {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #efeaeae6;
-  padding: 0.5rem 0;
+  background-color: #efeaeae6 !important;  /* Changed to match dashboard dropdown */
+  padding: 0.5rem 0 !important;             /* Match dashboard padding */
   min-width: 180px;
   z-index: 10;
   list-style: none;
   border-radius: 4px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
 }
 
-.dropdown-nav:hover .product-nav-dropdown {
+.dropdownNav:hover .productNavDropdown {
   display: block;
 }
 
-.product-nav-dropdown .dropdown-item {
-  padding: 0.5rem 1rem;
-  color: #004666;
+.productNavDropdownItem {
+  padding: 0.5rem 1.25rem !important;       /* Match dashboard padding */
+  background-color: transparent !important; /* Match dashboard */
+  color: #004666 !important;                 /* Match dashboard */
   text-decoration: none;
   display: block;
   font-family: 'Josefin Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.product-nav-dropdown .dropdown-item:hover {
-  background-color: #3432321c;
+.productNavDropdownItemHover:hover {
+  background-color: #3432321c !important;   /* Match dashboard hover */
   color: #004666 !important;
-}
-.bottom-navbar {
-  margin-top: 10px;
-  margin-bottom: 20px; /* Add space below the navbar */
-  padding: 0.5rem 0;
 }

@@ -1,41 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../Apis/config';
 import ProductCard from '../../Components/ProductCard/ProductCard';
+import styles from './ProductList.module.css';
 
 const ProductList = () => {
+  const [page, setPage] = useState(() => {
+    const savedPage = localStorage.getItem('productListPage');
+    return savedPage ? Number(savedPage) : 1;
+  });
+
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);  // Track loading state
-  const [error, setError] = useState(null);      // Track error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axiosInstance.get('/api/products')  // Remove the base URL - it's already in axiosInstance
+    setLoading(true);
+    axiosInstance
+      .get(`/api/products?page=${page}`)
       .then((res) => {
-        setProducts(res.data);  // Remove .products unless your backend wraps data in {products: [...]}
+        const data = res.data;
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else if (data.data && Array.isArray(data.data.products)) {
+          setProducts(data.data.products);
+        } else {
+          throw new Error('Unexpected API response structure');
+        }
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.response?.data?.message || 'Error fetching products');
+        setError('Error fetching products');
         setLoading(false);
-        console.error('Error:', err.response?.data || err.message);
+        console.error('Error fetching products:', err);
       });
-  }, []);
+  }, [page]);
 
-  if (loading) {
-    return <div>Loading products...</div>;  // Show loading message while data is being fetched
-  }
+  useEffect(() => {
+    localStorage.setItem('productListPage', page.toString());
+    // Keep saved page number to restore after back navigation
+  }, [page]);
 
-  if (error) {
-    return <div>{error}</div>;  // Show error message if something goes wrong
-  }
+  if (loading) return <div className={styles.loading}>Loading products...</div>;
+  if (error) return <div className={styles.error}>{error}</div>;
 
   return (
-    <div className="container py-4">
-      <div className="row g-4">
+    <div className={styles.container}>
+      <div className={styles.grid}>
         {products.map((product) => (
-          <div className="col-sm-6 col-md-4 col-lg-3" key={product.id}>
-            <ProductCard product={product} />
-          </div>
+          <ProductCard
+            key={product._id || product.id}
+            product={product}
+            page={page}  // Pass page prop here
+          />
         ))}
+      </div>
+      <div className={styles.pagination}>
+        <button
+          className={styles.pageButton}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <span className={styles.pageNumber}>Page {page}</span>
+        <button
+          className={styles.pageButton}
+          onClick={() => setPage((prev) => Math.min(prev + 1, 3))}
+          disabled={page === 3}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

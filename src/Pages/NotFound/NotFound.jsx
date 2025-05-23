@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import styles from './NotFound.module.css';
 
 const NotFound = () => {
   return (
-    <div className="not-found-container d-flex flex-column justify-content-center align-items-center text-center vh-100">
-      <h1 className="display-4">404 - Page Not Found</h1>
-      <p className="lead">Oops! The page you’re looking for doesn’t exist.</p>
-      <Link to="/" className="btn btn-primary mt-3">
+    <div className={styles.container}>
+      <img
+        src="/PageNotFound.jpg" // Ensure the image is inside the "public" folder
+        alt="Page Not Found"
+        className={styles.image}
+      />
+      <Link to="/" className={styles.backButton}>
         Back to Home
       </Link>
     </div>
