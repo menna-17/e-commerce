@@ -38,7 +38,7 @@
 .priceContainer {
   display: inline-flex;
   align-items: flex-end; /* vertically align baseline-ish */
-  gap: 10px; /* <-- Added gap to separate price/currency from stock status */
+  gap: 2px; /* <-- Added gap to separate price/currency from stock status */
 }
 
 .price {
@@ -51,7 +51,7 @@
 .currency {
   font-size: 15px;
   color: #444;
-  margin-left: 4px; /* small spacing, adjust as needed */
+  margin-left: 2px; /* small spacing, adjust as needed */
 }
 
 .stockStatus {

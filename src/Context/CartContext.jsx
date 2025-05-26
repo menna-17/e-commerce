@@ -14,8 +14,10 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
+  // Add product or increase quantity (but not beyond stock)
   const addToCart = (product) => {
     const productId = product._id || product.id;
+    const stock = product.inStock ?? product.instock ?? product.stock ?? Infinity;
 
     setCart((prevCart) => {
       const existingProduct = prevCart.find(
@@ -23,8 +25,6 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingProduct) {
-        // Increase quantity by 1, but do not exceed stock
-        const stock = product.instock ?? product.stock ?? product.quantity ?? Infinity;
         if ((existingProduct.quantity || 1) >= stock) return prevCart;
 
         return prevCart.map((item) =>
@@ -38,12 +38,28 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Remove product from cart
   const removeFromCart = (productId) => {
     setCart((prevCart) =>
       prevCart.filter((product) => (product._id || product.id) !== productId)
     );
   };
 
+  // Update product quantity directly (respect stock limits)
+  const updateQuantity = (productId, newQuantity) => {
+    setCart((prevCart) =>
+      prevCart.map((item) => {
+        if ((item._id || item.id) === productId) {
+          const stock = item.inStock ?? item.instock ?? item.stock ?? Infinity;
+          const validQuantity = Math.min(Math.max(newQuantity, 1), stock);
+          return { ...item, quantity: validQuantity };
+        }
+        return item;
+      })
+    );
+  };
+
+  // Calculate total price
   const calculateTotal = () => {
     return cart
       .reduce(
@@ -56,7 +72,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, calculateTotal }}
+      value={{ cart, addToCart, removeFromCart, updateQuantity, calculateTotal }}
     >
       {children}
     </CartContext.Provider>

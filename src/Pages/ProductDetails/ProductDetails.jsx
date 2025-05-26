@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../Apis/config";
 import { useCart } from "../../Context/CartContext";
 import styles from "./ProductDetails.module.css";
@@ -7,6 +7,7 @@ import styles from "./ProductDetails.module.css";
 const ProductDetails = () => {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
@@ -32,7 +33,8 @@ const ProductDetails = () => {
   }, [id]);
 
   const handleBuy = () => {
-    const stock = product.inStock ?? product.stock ?? product.quantity ?? Infinity;
+    const stock =
+      product.inStock ?? product.stock ?? product.quantity ?? Infinity;
     if (stock > 0) {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
@@ -41,8 +43,13 @@ const ProductDetails = () => {
     }
   };
 
+  const handleContinueShopping = () => {
+    navigate(-1); // Navigate back to previous page
+  };
+
   const handleIncrease = () => {
-    const stock = product.inStock ?? product.stock ?? product.quantity ?? Infinity;
+    const stock =
+      product.inStock ?? product.stock ?? product.quantity ?? Infinity;
     if (quantity < stock) {
       setQuantity((q) => q + 1);
     }
@@ -79,10 +86,15 @@ const ProductDetails = () => {
         </div>
 
         <div className={`${styles["product-info"]} col-md-6`}>
-          <h2 className={styles["product-title"]}>{product.title || "Unnamed Product"}</h2>
-          <p className={styles["product-price"]}>
-            ${product.price ? product.price.toFixed(2) : "N/A"}
-          </p>
+          <h2 className={styles["product-title"]}>
+            {product.title || "Unnamed Product"}
+          </h2>
+          <div className={styles.priceContainer}>
+            <p className={styles.productPrice}>
+              {product.price != null ? product.price : "N/A"}
+            </p>
+            <span className={styles.currency}>EGP</span>
+          </div>
           <p className={styles["product-description"]}>
             {product.description || "No description available."}
           </p>
@@ -99,10 +111,26 @@ const ProductDetails = () => {
               <button className={styles["btn-buy-now"]} onClick={handleBuy}>
                 Buy Now
               </button>
+              <button
+                className={styles["btn-continue-shopping"]}
+                onClick={handleContinueShopping}
+              >
+                Continue Shopping
+              </button>
               <div className={styles["quantity-control"]}>
-                <button onClick={handleDecrease}>-</button>
+                <button
+                  onClick={handleDecrease}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
                 <span>{quantity}</span>
-                <button onClick={handleIncrease}>+</button>
+                <button
+                  onClick={handleIncrease}
+                  disabled={quantity >= stock}
+                >
+                  +
+                </button>
               </div>
             </div>
           )}

@@ -62,8 +62,14 @@
 }
 
 .productPrice {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #5c5f61;
+}
+
+.productTotalPrice {
+  font-size: 1.1rem;
+  color: #5c5f61;
+  margin-top: 5px;
 }
 
 .removeButton {
@@ -86,9 +92,30 @@
 }
 
 .totalPrice {
-  font-size: 1.6rem;
+  font-size: 1.9rem;
   font-weight: 600;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Currency style for product prices (small size) */
+.currency {
+  font-size: 0.8rem;
+  color: #444;
+  margin-left: 4px;
+  align-self: flex-end;
+}
+
+/* Currency style for total price (larger size & different color) */
+.totalCurrency {
+  font-size: 1.2rem;
+  color: #093866;
+  font-weight: 700;
+  margin-left: 6px;
+  align-self: flex-end;
 }
 
 .actions {
@@ -124,3 +151,59 @@
 .checkoutButton:hover {
   background-color: #04213f;
 }
+
+/* Price container for aligning price and currency nicely */
+.priceContainer {
+  display: inline-flex;
+  align-items: flex-end;
+}
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 13px; /* space between quantity controls and remove button */
+}
+
+/* Override itemActions to keep flex column but no gap needed here anymore */
+.itemActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 130px;
+  margin-top: 30px;
+
+}
+
+/* Optionally adjust quantityControl margin-top since it's inside actionsGroup now */
+.quantityControl {
+  margin-top: 0;
+}
+
+
+.quantityControl button {
+  background-color: #093866;
+  color: rgba(245, 248, 248, 0.9);
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quantityControl button:disabled {
+  background-color: #093866;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.quantityControl button:hover:not(:disabled) {
+  background-color:#04213f;
+}
+
+.quantityControl span {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 10px;  /* adds 10px left and right margin */
+}
+

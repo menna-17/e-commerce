@@ -49,16 +49,28 @@
 
 .product-title {
   font-weight: bold;
-  font-size: 35px;
-  margin-bottom: 1rem;
+  font-size: 42px;
+  margin-bottom: 0.2rem;
   color: #093866;
 }
 
-.product-price {
-  color: #5c5f61;
-  font-weight: 600;
-  font-size: 30px;
-  margin-bottom: 1rem;
+.productPrice {
+  font-size: 40px;
+  font-weight: 500;
+  color: #444;
+  margin: 4px 0 0 0;
+  text-align: left;
+}
+
+.currency {
+  font-size: 20px;
+  color: #444;
+  margin-left: 4px;
+}
+
+.priceContainer {
+  display: inline-flex;
+  align-items: flex-end;
 }
 
 .product-description {
@@ -80,7 +92,24 @@
 }
 
 .btn-buy-now:hover {
-  background-color: grey;
+  background-color:  #04213f;
+}
+
+/* New button style */
+.btn-continue-shopping {
+  background-color: #6c757d;
+  color: rgba(245, 248, 248, 0.9);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-continue-shopping:hover {
+  background-color: #555758;
 }
 
 .loading,
@@ -116,7 +145,8 @@
     text-align: center;
   }
 
-  .btn-buy-now {
+  .btn-buy-now,
+  .btn-continue-shopping {
     align-self: center;
   }
 
@@ -135,7 +165,7 @@
 
 .quantity-control button {
   background-color: #093866;
-  color: white;
+  color: rgba(245, 248, 248, 0.9);
   border: none;
   padding: 5px 10px;
   font-size: 18px;
@@ -148,13 +178,20 @@
   font-weight: bold;
 }
 
+.quantity-control button:disabled {
+  background-color:#093866;
+  cursor: not-allowed;
+}
+.quantity-control button:hover:not(:disabled) {
+  background-color:#04213f;
+}
 .low-stock {
   color: #d8ba41;
   font-weight: bold;
 }
 
 .out-of-stock {
-  color: gray;
+  color: rgb(132, 25, 25);
   font-style: italic;
 }
 

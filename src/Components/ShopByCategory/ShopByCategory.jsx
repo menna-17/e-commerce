@@ -1,15 +1,34 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./ShopByCategory.module.css";
 
 const categories = [
-  { name: "Jewelry", image: "J.jpeg" },
-  { name: "Crochet", image: "C.jpeg" },
-  { name: "Candles", image: "Can.jpeg" },
-  { name: "Ceramic", image: "Cer.jpeg" },
-  { name: "Personal Essentials", image: "P.jpeg" },
+  { name: "Jewelry", image: "jewelry.jpeg" },
+  { name: "Crochet", image: "crochet.jpeg" },
+  { name: "Candles", image: "candles.jpeg" },
+  { name: "Ceramics", image: "ceramic.jpeg" },
+  { name: "Home Essentials", image: "homeess.jpeg" },
 ];
 
+// Map frontend category names to backend category names exactly
+const categoryMap = {
+  jewelry: "Jewelry",
+  crochet: "Crochet",
+  candles: "Candles",
+  ceramic: "Ceramics",       // Note plural form on backend
+  "home essentials": "Home Essential"
+};
+
 const ShopByCategory = () => {
+  const navigate = useNavigate();
+
+  const handleShopNow = (categoryName) => {
+    const key = categoryName.toLowerCase();
+    const backendCategory = categoryMap[key] || categoryName;
+    // Navigate to the new category-products page (not product-list)
+    navigate(`/category-products?category=${encodeURIComponent(backendCategory)}`);
+  };
+
   return (
     <section className={styles["shop-by-category"]}>
       <h2 className={styles["section-title"]}>Shop by Category</h2>
@@ -21,10 +40,19 @@ const ShopByCategory = () => {
             key={idx}
             className={`${styles["category-card"]} ${styles["large-card"]}`}
             style={{ backgroundImage: `url(${category.image})` }}
+            onClick={() => handleShopNow(category.name)}
           >
             <div className={styles.overlay}>
               <h3 className={styles["category-name"]}>{category.name}</h3>
-              <button className={styles["shop-button"]}>Shop Now</button>
+              <button
+                className={styles["shop-button"]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShopNow(category.name);
+                }}
+              >
+                Shop Now
+              </button>
             </div>
           </div>
         ))}
@@ -37,10 +65,19 @@ const ShopByCategory = () => {
             key={idx}
             className={`${styles["category-card"]} ${styles["small-card"]}`}
             style={{ backgroundImage: `url(${category.image})` }}
+            onClick={() => handleShopNow(category.name)}
           >
             <div className={styles.overlay}>
               <h3 className={styles["category-name"]}>{category.name}</h3>
-              <button className={styles["shop-button"]}>Shop Now</button>
+              <button
+                className={styles["shop-button"]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShopNow(category.name);
+                }}
+              >
+                Shop Now
+              </button>
             </div>
           </div>
         ))}

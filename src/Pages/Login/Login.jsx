@@ -11,7 +11,7 @@ function Login() {
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     setEmailError("");
@@ -32,16 +32,25 @@ function Login() {
 
     if (!isValid) return;
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const foundUser = users.find(
-      (user) => user.email === email && user.password === password
-    );
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (foundUser) {
-      localStorage.setItem("loggedInUser", JSON.stringify(foundUser));
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setServerError(data.message || "Login failed");
+        return;
+      }
+
+      localStorage.setItem("loggedInUser", JSON.stringify(data.user));
       navigate("/dashboard");
-    } else {
-      setServerError("Invalid email or password.");
+    } catch (err) {
+      setServerError("Something went wrong. Please try again.");
     }
   };
 

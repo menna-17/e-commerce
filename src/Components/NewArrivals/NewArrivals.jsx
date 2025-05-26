@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../Apis/config';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../Context/CartContext';
 import styles from './NewArrivals.module.css';
+import { FiShoppingCart, FiCreditCard } from 'react-icons/fi';
 
 const NewArrivals = () => {
   const [products, setProducts] = useState([]);
@@ -9,10 +11,11 @@ const NewArrivals = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const { addToCart } = useCart();
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axiosInstance.get('/api/products?limit=4&page=1');
+    axiosInstance.get('/api/products?limit=4&page=1')
+      .then(response => {
         const data = response.data;
 
         if (Array.isArray(data)) {
@@ -24,16 +27,24 @@ const NewArrivals = () => {
         } else {
           throw new Error('Unexpected API response structure');
         }
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Error fetching products:', error);
         setError('Error fetching products');
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchProducts();
+      });
   }, []);
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
+
+  const handleBuyNow = (product) => {
+    addToCart(product);
+    navigate('/checkout'); 
+  };
 
   if (loading) return <p className={styles.statusMessage}>Loading new arrivals...</p>;
   if (error) return <p className={styles.statusMessage}>{error}</p>;
@@ -56,15 +67,41 @@ const NewArrivals = () => {
               onKeyDown={(e) => e.key === 'Enter' && navigate(`/product/${id}`)}
             >
               <div className={styles.newArrivalsProductCard}>
-                <img
-                  src={imgSrc}
-                  alt={product.title || 'Product'}
-                  className={styles.newArrivalsImage}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.target.src = '/default-product.jpg';
-                  }}
-                />
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={imgSrc}
+                    alt={product.title || 'Product'}
+                    className={styles.newArrivalsImage}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.src = '/default-product.jpg';
+                    }}
+                  />
+                  <div className={styles.hoverActions}>
+                    <button
+                      className={styles.iconButton}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddToCart(product);
+                      }}
+                      aria-label={`Add to cart: ${product.title}`}
+                      title="Add to Cart"
+                    >
+                      <FiShoppingCart />
+                    </button>
+                    <button
+                      className={`${styles.iconButton} ${styles.buyNowButton}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleBuyNow(product);
+                      }}
+                      aria-label={`Buy now: ${product.title}`}
+                      title="Buy Now"
+                    >
+                      <FiCreditCard />
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className={styles.newArrivalsInfo}>
                 <p className={styles.newArrivalsTitle}>{product.title}</p>

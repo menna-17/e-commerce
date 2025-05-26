@@ -1,8 +1,9 @@
-import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './Components/Navbar/Navbar';
 import Footer from './Components/Footer/Footer';
-import './index.css'
+import './index.css';
+
 // Lazy load all pages
 const Home = lazy(() => import('./Pages/Home/Home'));
 const ProductList = lazy(() => import('./Pages/ProductList/ProductList'));
@@ -17,6 +18,21 @@ const EditProducts = lazy(() => import('./Pages/Dashboard/EditProducts/EditProdu
 const OrdersPage = lazy(() => import('./Pages/Dashboard/OrdersPage/OrdersPage'));
 const AdminView = lazy(() => import('./Pages/Dashboard/AdminView/AdminView'));
 const NotFound = lazy(() => import('./Pages/NotFound/NotFound'));
+const Contact = lazy(() => import('./Pages/Contact/Contact'));
+
+// NEW: Lazy load CategoryProducts
+const CategoryProducts = lazy(() => import('./Pages/CategoryProducts/CategoryProducts'));
+
+// ScrollToTop component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 const LayoutWithNavbarFooter = ({ Component }) => (
   <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -41,11 +57,10 @@ const LayoutWithFooterOnly = ({ Component }) => (
   </div>
 );
 
-
-
 const App = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Pages with Navbar + Footer */}
         <Route path="/" element={<LayoutWithNavbarFooter Component={Home} />} />
@@ -58,6 +73,10 @@ const App = () => {
         <Route path="/dashboard/edit-products" element={<LayoutWithNavbarFooter Component={EditProducts} />} />
         <Route path="/dashboard/orders" element={<LayoutWithNavbarFooter Component={OrdersPage} />} />
         <Route path="/dashboard/products" element={<LayoutWithNavbarFooter Component={AdminView} />} />
+        <Route path="/contact" element={<LayoutWithNavbarFooter Component={Contact} />} />
+
+        {/* NEW route for category products */}
+        <Route path="/category-products" element={<LayoutWithNavbarFooter Component={CategoryProducts} />} />
 
         {/* Login & Signup with Footer only */}
         <Route path="/login" element={<LayoutWithFooterOnly Component={Login} />} />

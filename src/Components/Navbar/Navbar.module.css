@@ -172,3 +172,16 @@
   background-color: #3432321c !important;   /* Match dashboard hover */
   color: #004666 !important;
 }
+.logoImage {
+  width: 150px;          /* Adjust size as you like */
+  height: 70px;
+  border-radius: 5px;     /* Remove rounded corners */
+  object-fit: cover;    /* Cover the container properly */
+  border: 2px solid #093866;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logoImage:hover {
+  transform: scale(1.05);
+}
