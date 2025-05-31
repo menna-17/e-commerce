@@ -33,8 +33,7 @@ const ProductDetails = () => {
   }, [id]);
 
   const handleBuy = () => {
-    const stock =
-      product.inStock ?? product.stock ?? product.quantity ?? Infinity;
+    const stock = product.inStock ?? product.stock ?? product.quantity ?? Infinity;
     if (stock > 0) {
       for (let i = 0; i < quantity; i++) {
         addToCart(product);
@@ -44,12 +43,11 @@ const ProductDetails = () => {
   };
 
   const handleContinueShopping = () => {
-    navigate(-1); // Navigate back to previous page
+    navigate(-1);
   };
 
   const handleIncrease = () => {
-    const stock =
-      product.inStock ?? product.stock ?? product.quantity ?? Infinity;
+    const stock = product.inStock ?? product.stock ?? product.quantity ?? Infinity;
     if (quantity < stock) {
       setQuantity((q) => q + 1);
     }
@@ -89,49 +87,53 @@ const ProductDetails = () => {
           <h2 className={styles["product-title"]}>
             {product.title || "Unnamed Product"}
           </h2>
+
           <div className={styles.priceContainer}>
-            <p className={styles.productPrice}>
+            <span className={styles.productPrice}>
               {product.price != null ? product.price : "N/A"}
-            </p>
+            </span>
             <span className={styles.currency}>EGP</span>
           </div>
-          <p className={styles["product-description"]}>
-            {product.description || "No description available."}
-          </p>
 
+          {/* Stock status text below price */}
           {stock <= 5 && stock > 0 && (
-            <p className={styles["low-stock"]}>
+            <p className={`${styles["product-stock-status"]} ${styles["low-stock"]}`}>
               Hurry! Only {stock} item{stock > 1 ? "s" : ""} left in stock.
             </p>
           )}
-          {stock === 0 && <p className={styles["out-of-stock"]}>Out of Stock</p>}
+          {stock === 0 && (
+            <p className={`${styles["product-stock-status"]} ${styles["out-of-stock"]}`}>
+              Out of Stock
+            </p>
+          )}
+
+          <p className={styles["product-description"]}>
+            {product.description || "No description available."}
+          </p>
 
           {stock > 0 && (
             <div className={styles["action-row"]}>
               <button className={styles["btn-buy-now"]} onClick={handleBuy}>
                 Buy Now
               </button>
+
+              {/* Quantity counter beside Buy Now button */}
+              <div className={styles["quantity-counter"]}>
+                <button onClick={handleDecrease} disabled={quantity <= 1}>
+                  -
+                </button>
+                <span>{quantity}</span>
+                <button onClick={handleIncrease} disabled={quantity >= stock}>
+                  +
+                </button>
+              </div>
+
               <button
                 className={styles["btn-continue-shopping"]}
                 onClick={handleContinueShopping}
               >
                 Continue Shopping
               </button>
-              <div className={styles["quantity-control"]}>
-                <button
-                  onClick={handleDecrease}
-                  disabled={quantity <= 1}
-                >
-                  -
-                </button>
-                <span>{quantity}</span>
-                <button
-                  onClick={handleIncrease}
-                  disabled={quantity >= stock}
-                >
-                  +
-                </button>
-              </div>
             </div>
           )}
         </div>

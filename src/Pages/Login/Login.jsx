@@ -33,12 +33,14 @@ function Login() {
     if (!isValid) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 
@@ -48,8 +50,8 @@ function Login() {
       }
 
       localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-      navigate("/dashboard");
-    } catch (err) {
+      navigate("/");
+    } catch {
       setServerError("Something went wrong. Please try again.");
     }
   };
@@ -57,41 +59,59 @@ function Login() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        <h3 className={styles.heading}>Login</h3>
+        <h2 className="text-center mb-4 fw-bold">Login</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
-            <label className={`form-label ${styles.formLabel}`}>Email address</label>
+            <label className={styles.formLabel}>Email address</label>
             <input
               type="email"
-              className={`form-control ${emailError ? "is-invalid" : ""}`}
+              className={`form-control form-control-lg rounded-3 ${
+                emailError ? "is-invalid" : ""
+              }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {emailError && <div className="text-danger mt-1">{emailError}</div>}
+            {emailError && (
+              <div className="invalid-feedback">{emailError}</div>
+            )}
           </div>
 
           <div className="mb-3">
-            <label className={`form-label ${styles.formLabel}`}>Password</label>
+            <label className={styles.formLabel}>Password</label>
             <input
               type="password"
-              className={`form-control ${passwordError ? "is-invalid" : ""}`}
+              className={`form-control form-control-lg rounded-3 ${
+                passwordError ? "is-invalid" : ""
+              }`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {passwordError && <div className="text-danger mt-1">{passwordError}</div>}
+            {passwordError && (
+              <div className="invalid-feedback">{passwordError}</div>
+            )}
+
+            <div className={styles.forgotPasswordWrapper}>
+              <a href="/forgot-password" className={styles.forgotPasswordLink}>
+                Forgot Password?
+              </a>
+            </div>
           </div>
 
-          {serverError && <div className="text-danger text-center mb-2">{serverError}</div>}
+          {serverError && (
+            <div className="text-danger text-center mb-2">{serverError}</div>
+          )}
 
-          <button type="submit" className={`btn ${styles.customLoginBtn} w-100`}>
+          <button
+            type="submit"
+            className={`btn btn-lg w-100 rounded-3 shadow-sm ${styles.customLoginBtn}`}
+          >
             Login
           </button>
 
-          <div className="text-center mt-3">
-            <span>Don't have an account? </span>
-            <a href="/signup" className="text-primary text-decoration-none fw-semibold">
-              Sign Up
-            </a>
+          <div className={styles.loginPrompt}>
+            <small>
+              Don&apos;t have an account? <a href="/signup">Sign Up</a>
+            </small>
           </div>
         </form>
       </div>

@@ -14,49 +14,53 @@
 
 .formSection {
   background-color: #f8f9fa;
+  color: #093866
 }
 
 .inputControl {
   border-radius: 8px;
-  padding: 10px;
   font-size: 16px;
 }
 
 .btnWarning {
-  background-color: #ffc107;
-  border: none;
-  color: rgba(245, 248, 248, 0.9);
+  background-color: grey;
+ border: none;
+  color: #ffffff;
   font-weight: 600;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  cursor: pointer;
   font-size: 1rem;
+  border-radius: 6px;
+  padding: 6px 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btnWarning:hover {
-  background-color: #584405;
+  background-color: #555;
+  color: white;
 }
 
 .tableCell {
-  vertical-align: middle;
+vertical-align: middle;
+  color: #093866 !important ;
+  font-weight: 500;
 }
 
 .tableHover tbody tr:hover {
   background-color: #f1f1f1;
 }
-
 .customAddBtn {
   background-color: #093866;
   border: none;
-  color: rgba(245, 248, 248, 0.9);
+  color: #ffffff;
   font-weight: 600;
   font-size: 1rem;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 6px;
+  padding: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .customAddBtn:hover {
-  background-color: #0c2f57;
+background-color: #092a4d;
+color: white;
 }
 
 .tableHead {
@@ -72,5 +76,36 @@
 .tableStyle {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(9, 56, 102, 0.08);
+  box-shadow: 0 2px 8 px rgba(9, 56, 102, 0.08);
+}
+.paginationWrapper {
+  margin-top: 1rem;
+}
+
+.paginationBtn {
+  background-color: #093866;
+  border: none;
+  color: white;
+    border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.paginationBtn:hover:not(:disabled) {
+  background-color: #092a4d;
+  transform: scale(1.05);
+}
+
+.paginationBtn:disabled {
+  background-color: #ccc !important;
+  color:#093866 !important;
+  cursor: not-allowed;
+}
+
+.pageNumber {
+  font-weight: bold;
+  color: #093866;
+  font-size: 1.1rem;
 }

@@ -33,9 +33,10 @@ const egyptGovernorates = [
   "Sohag",
 ];
 
+
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, updateQuantity } = useCart();
+  const { cart, updateQuantity, removeFromCart } = useCart();
 
   const increaseQuantity = (productId) => {
     const item = cart.find((item) => (item._id || item.id) === productId);
@@ -53,6 +54,7 @@ const Checkout = () => {
       updateQuantity(productId, (item.quantity || 1) - 1);
     }
   };
+
   const [form, setForm] = useState({
     email: "",
     country: "Egypt",
@@ -101,8 +103,8 @@ const Checkout = () => {
         if (!value) return "Governorate is required";
         return "";
       case "postalCode":
-        if (!value.trim()) return "Postal code is required";
-        if (!/^\d{5}$/.test(value)) return "Postal code must be 5 digits";
+        if (value.trim() && !/^\d{5}$/.test(value))
+          return "Postal code must be 5 digits";
         return "";
       case "phone":
         if (!value.trim()) return "Phone number is required";
@@ -150,6 +152,7 @@ const Checkout = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -237,7 +240,7 @@ const Checkout = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label>Apartment:</label>
+          <label>Apartment (optional):</label>
           <input
             type="text"
             name="apartment"
@@ -266,7 +269,10 @@ const Checkout = () => {
             name="governorate"
             value={form.governorate}
             onChange={handleChange}
-            className={errors.governorate ? styles.inputError : ""}
+            className={`${styles.selectInput} ${
+              errors.governorate ? styles.inputError : ""
+            }`}
+            aria-label="Select your governorate"
           >
             <option value="">Select Governorate</option>
             {egyptGovernorates.map((gov, idx) => (
@@ -281,7 +287,7 @@ const Checkout = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label>Postal Code(optional):</label>
+          <label>Postal Code (optional):</label>
           <input
             type="text"
             name="postalCode"
@@ -297,7 +303,7 @@ const Checkout = () => {
         <div className={styles.formGroup}>
           <label>Phone:</label>
           <input
-            type="text"
+            type="tel"
             name="phone"
             value={form.phone}
             onChange={handleChange}
@@ -308,15 +314,18 @@ const Checkout = () => {
           )}
         </div>
 
-        <h2 className={styles.sectionTitle}>Payment Method</h2>
+        <h2 className={styles.sectionTitle}>Payment</h2>
+
         <div className={styles.formGroup}>
+          <label>Payment Method:</label>
           <select
             name="paymentMethod"
             value={form.paymentMethod}
             onChange={handleChange}
+            className={styles.selectInput}
           >
             <option value="Cash on Delivery">Cash on Delivery</option>
-            <option value="Card">Debit/Credit Card</option>
+            <option value="Card">Card</option>
           </select>
         </div>
 
@@ -330,8 +339,6 @@ const Checkout = () => {
                 value={form.cardNumber}
                 onChange={handleChange}
                 className={errors.cardNumber ? styles.inputError : ""}
-                maxLength={19}
-                placeholder="1234 5678 9012 3456"
               />
               {errors.cardNumber && (
                 <span className={styles.errorMsg}>{errors.cardNumber}</span>
@@ -360,8 +367,6 @@ const Checkout = () => {
                 value={form.expiry}
                 onChange={handleChange}
                 className={errors.expiry ? styles.inputError : ""}
-                placeholder="MM/YY"
-                maxLength={5}
               />
               {errors.expiry && (
                 <span className={styles.errorMsg}>{errors.expiry}</span>
@@ -371,12 +376,11 @@ const Checkout = () => {
             <div className={styles.formGroup}>
               <label>CVV:</label>
               <input
-                type="text"
+                type="password"
                 name="cvv"
                 value={form.cvv}
                 onChange={handleChange}
                 className={errors.cvv ? styles.inputError : ""}
-                maxLength={4}
               />
               {errors.cvv && (
                 <span className={styles.errorMsg}>{errors.cvv}</span>
@@ -385,7 +389,7 @@ const Checkout = () => {
           </>
         )}
 
-        <h2 className={styles.sectionTitle}>Order Summary</h2>
+<h2 className={styles.sectionTitle}>Order Summary</h2>
         <ul className={styles.orderSummary}>
           {cart.map((item) => {
             const productId = item._id || item.id;
@@ -423,9 +427,12 @@ const Checkout = () => {
                     <div className={styles.qtyControls}>
                       <button
                         type="button"
-                        onClick={() => decreaseQuantity(productId)}
+                        onClick={() =>
+                          item.quantity === 1
+                            ? removeFromCart(productId)
+                            : decreaseQuantity(productId)
+                        }
                         className={styles.qtyButton}
-                        disabled={item.quantity <= 1}
                       >
                         -
                       </button>

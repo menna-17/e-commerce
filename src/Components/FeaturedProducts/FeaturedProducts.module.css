@@ -7,7 +7,7 @@
   padding: 20px;
   background-color: transparent;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
 }
 
@@ -25,8 +25,9 @@
   gap: 30px;
   overflow-x: auto;
   padding-bottom: 25px;
+  padding-right: 40px;
   scrollbar-width: thin;
-  scrollbar-color:  #093866 transparent;
+  scrollbar-color: #093866 transparent;
 }
 
 .product-list::-webkit-scrollbar {
@@ -40,7 +41,7 @@
 
 .product-card {
   flex: 0 0 auto;
-  width: 240px;
+  width: 220px;
   cursor: pointer;
   padding: 30px;
   border-radius: 8px;
@@ -51,21 +52,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform-origin: center;
-  will-change: transform;
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
   position: relative;
 }
 
 .product-card:hover {
-  transform: scale(1.05);
+  transform: scale(0.95);
 }
 
-/* Wrapper for image and hover icons */
 .imageWrapper {
   position: relative;
   width: 100%;
-  height: 160px; /* same as product image height */
+  height: 160px;
   margin-bottom: 15px;
   border-radius: 6px;
   overflow: hidden;
@@ -80,7 +78,6 @@
   animation: fadeIn 0.5s forwards ease-in;
 }
 
-/* Hover actions container */
 .hoverActions {
   position: absolute;
   bottom: 10px;
@@ -93,9 +90,26 @@
   z-index: 10;
 }
 
-/* UPDATED: show hoverActions when hovering the whole product card */
 .product-card:hover .hoverActions {
   opacity: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hoverActions {
+    opacity: 1 !important;
+  }
+
+  .product-card:hover {
+    transform: none !important;
+  }
+
+  .iconButton,
+  .iconButton:hover,
+  .iconButton:active {
+    background-color: #093866 !important;
+    color: rgba(245, 248, 248, 0.9) !important;
+    transition: none !important;
+  }
 }
 
 .iconButton {
@@ -111,56 +125,68 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.iconButton:hover {
+@media (hover: hover) and (pointer: fine) {
+  .iconButton:hover {
+    background-color: rgba(194, 190, 190, 0.571);
+  }
+
+  .iconButton:active {
+    background-color: rgba(194, 190, 190, 0.571);
+  }
+}
+
+.iconButton:active {
   background-color: rgba(194, 190, 190, 0.571);
-}
-
-/* Updated styles for price container like in NewArrivals */
-.priceContainer {
-  display: inline-flex;
-  align-items: flex-end;
-}
-
-.product-price {
-  font-size: 30px;
-  font-weight: 500;
-  color: #444;
-  margin: 4px 0 0 0;
-  text-align: left;
-  font-family: 'Josefin Sans', 'Overpass', sans-serif;
-}
-
-.currency {
-  font-size: 15px;
-  color: #444;
-  margin-left: 4px;
 }
 
 .product-title {
   font-weight: 600;
-  font-size: 25px;
+  font-size: 27px; 
   color: #093866;
-  margin: 0 0 5px 0;
+  margin: 10px 0 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
 }
 
-/* For loading and error text */
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px; 
+}
+
+.product-price {
+  font-size: 23px; 
+  font-weight: 500;
+  color: #444;
+  text-align: center;
+  font-family: 'Josefin Sans', 'Overpass', sans-serif;
+  margin: 0;
+}
+
+.currency {
+  font-size: 14px;
+  color: #444;
+  margin: 0;
+  line-height: 1.5;
+}
+
 .statusMessage {
   font-family: 'Josefin Sans', 'Overpass', sans-serif;
   text-align: center;
   padding: 30px 0;
   color: #093866;
   font-weight: 600;
-  font-size: 1.2rem; 
+  font-size: 1.2rem;
 }
 
 @keyframes fadeIn {
   to {
     opacity: 1;
-  } 
+  }
 }

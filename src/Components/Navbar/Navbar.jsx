@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,8 +10,17 @@ const categoryMap = {
   crochet: "Crochet",
   candles: "Candles",
   ceramic: "Ceramics",
-  "home essentials": "Home Essential"
+  "home essentials": "Home Essentials",
 };
+
+const categories = [
+  { key: "all-products", labelEn: "All Products", labelAr: "كل المنتجات" },
+  { key: "jewelry", labelEn: "Jewelry", labelAr: "إكسسوارات" },
+  { key: "candles", labelEn: "Candles", labelAr: "شموع" },
+  { key: "crochet", labelEn: "Crochet", labelAr: "كروشيه" },
+  { key: "ceramic", labelEn: "Ceramics", labelAr: "سيراميك" },
+  { key: "home essentials", labelEn: "Home Essentials", labelAr: "الاحتياجات المنزلية" },
+];
 
 const Navbar = () => {
   const { language, changeLanguage } = useLanguage();
@@ -19,29 +28,113 @@ const Navbar = () => {
   const cartCount = cart.length;
   const navigate = useNavigate();
 
-  const handleCategoryNavigation = (categoryName) => {
-    const key = categoryName.toLowerCase();
-    const backendCategory = categoryMap[key] || categoryName;
-    navigate(`/category-products?category=${encodeURIComponent(backendCategory)}`);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+  const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
+  const [dashboardDropdownOpen, setDashboardDropdownOpen] = useState(false);
+  const [languageDropdownOpen, setLanguageDropdownOpen] = useState(false);
+
+  const productsDropdownRef = useRef(null);
+  const dashboardDropdownRef = useRef(null);
+  const languageDropdownRef = useRef(null);
+
+  const dropdownTimerRef = useRef(null);
+  const oppositeLang = language === "en" ? "ar" : "en";
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setProductsDropdownOpen(false);
+        setDashboardDropdownOpen(false);
+        setLanguageDropdownOpen(false);
+        clearTimeout(dropdownTimerRef.current);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(dropdownTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const clickedOutsideProducts = productsDropdownRef.current && !productsDropdownRef.current.contains(event.target);
+      const clickedOutsideDashboard = dashboardDropdownRef.current && !dashboardDropdownRef.current.contains(event.target);
+      const clickedOutsideLanguage = languageDropdownRef.current && !languageDropdownRef.current.contains(event.target);
+
+      if (clickedOutsideProducts && clickedOutsideDashboard && clickedOutsideLanguage) {
+        setProductsDropdownOpen(false);
+        setDashboardDropdownOpen(false);
+        setLanguageDropdownOpen(false);
+        clearTimeout(dropdownTimerRef.current);
+      }
+    };
+
+    if (productsDropdownOpen || dashboardDropdownOpen || languageDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [productsDropdownOpen, dashboardDropdownOpen, languageDropdownOpen]);
+
+  const handleCategoryNavigation = (categoryLabelEn, key) => {
+    clearTimeout(dropdownTimerRef.current); // stop timer on category click
+    if (key === "all-products") {
+      navigate("/product-list");
+    } else {
+      const backendCategory = categoryMap[key.toLowerCase()] || categoryLabelEn;
+      navigate(`/category-products?category=${encodeURIComponent(backendCategory)}`);
+    }
+    if (isMobile) setProductsDropdownOpen(false);
+  };
+
+  const handleProductsClick = (e) => {
+    if (isMobile) {
+      e.preventDefault();
+      const newOpen = !productsDropdownOpen;
+      setProductsDropdownOpen(newOpen);
+
+      if (newOpen) {
+        dropdownTimerRef.current = setTimeout(() => {
+          setProductsDropdownOpen(false);
+          // No auto-navigation anymore
+        }, 5000);
+      } else {
+        clearTimeout(dropdownTimerRef.current);
+      }
+    }
+  };
+
+  const handleMouseEnter = (setter) => {
+    if (!isMobile) setter(true);
+  };
+
+  const handleMouseLeave = (setter) => {
+    if (!isMobile) setter(false);
   };
 
   return (
     <header className={styles.mainNavbar}>
       {/* Top Navbar */}
-      <div className={`${styles.topNavbar} py-2 position-relative`}>
+      <div className={`${styles.topNavbar} py-2`}>
         <div className="container d-flex justify-content-between align-items-center">
           <div className={styles.logo}>
-            <Link to="/" className={`${styles.topNavbarBrandHover}`}>
+            <Link to="/" className={styles.topNavbarBrandHover}>
               <img src="/logo.jpg" alt="LocalMarket Logo" className={styles.logoImage} />
             </Link>
           </div>
 
           <div className="d-flex align-items-center gap-3">
-            {/* Cart */}
-            <Link
-              to="/cart"
-              className={`${styles.cartIcon} ${styles.cartIconHover} position-relative`}
-            >
+            <Link to="/cart" className={`${styles.cartIcon} ${styles.cartIconHover} position-relative`}>
               <FaShoppingCart size={22} />
               {cartCount > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -50,66 +143,58 @@ const Navbar = () => {
               )}
             </Link>
 
-            {/* Login */}
             <Link to="/login" className={`${styles.topNavbarLink} ${styles.topNavbarLinkHover} nav-link`}>
               {language === "ar" ? "تسجيل الدخول" : "Login"}
             </Link>
 
-            {/* Signup */}
             <Link to="/signup" className={`${styles.topNavbarLink} ${styles.topNavbarLinkHover} nav-link`}>
               {language === "ar" ? "التسجيل" : "Register"}
             </Link>
 
             {/* Dashboard Dropdown */}
-            <div className="dropdown">
-              <button
-                className={`${styles.dashboardBtn} btn btn-sm dropdown-toggle ${styles.dashboardBtnHover} ${styles.dashboardBtnFocus}`}
-                type="button"
-                id="dashboardDropdown"
+            <div
+              ref={dashboardDropdownRef}
+              className={`dropdown ${styles.dropdownNav}`}
+              onMouseEnter={() => handleMouseEnter(setDashboardDropdownOpen)}
+              onMouseLeave={() => handleMouseLeave(setDashboardDropdownOpen)}
+            >
+              <span
+                className={`${styles.topNavbarLink} ${styles.topNavbarLinkHover} nav-link dropdown-toggle`}
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
+                style={{ cursor: "pointer" }}
               >
                 {language === "ar" ? "لوحة التحكم" : "Dashboard"}
-              </button>
-              <ul className={`${styles.dropdownMenu} dropdown-menu dropdown-menu-end`}>
-                <li>
-                  <Link to="/dashboard" className={`${styles.dropdownMenuItem} ${styles.dropdownMenuItemHover} dropdown-item`}>
-                    {language === "ar" ? "الرئيسية" : "Main"}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/dashboard/manage-users" className={`${styles.dropdownMenuItem} ${styles.dropdownMenuItemHover} dropdown-item`}>
-                    {language === "ar" ? "إدارة المستخدمين" : "Manage Users"}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/dashboard/edit-products" className={`${styles.dropdownMenuItem} ${styles.dropdownMenuItemHover} dropdown-item`}>
-                    {language === "ar" ? "تعديل المنتجات" : "Edit Products"}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/dashboard/orders" className={`${styles.dropdownMenuItem} ${styles.dropdownMenuItemHover} dropdown-item`}>
-                    {language === "ar" ? "الطلبات" : "Orders"}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/dashboard/products" className={`${styles.dropdownMenuItem} ${styles.dropdownMenuItemHover} dropdown-item`}>
-                    {language === "ar" ? "إدارة المنتجات" : "Admin Products"}
-                  </Link>
-                </li>
+              </span>
+              <ul className={`dropdown-menu ${styles.productNavDropdown} ${dashboardDropdownOpen ? "show" : ""}`}>
+                <li><Link to="/dashboard" className="dropdown-item">{language === "ar" ? "الرئيسية" : "Main"}</Link></li>
+                <li><Link to="/dashboard/manage-users" className="dropdown-item">{language === "ar" ? "إدارة المستخدمين" : "Manage Users"}</Link></li>
+                <li><Link to="/dashboard/edit-products" className="dropdown-item">{language === "ar" ? "تعديل المنتجات" : "Edit Products"}</Link></li>
+                <li><Link to="/dashboard/orders" className="dropdown-item">{language === "ar" ? "الطلبات" : "Orders"}</Link></li>
+                <li><Link to="/dashboard/products" className="dropdown-item">{language === "ar" ? "إدارة المنتجات" : "Admin Products"}</Link></li>
               </ul>
             </div>
 
-            {/* Language Selector */}
-            <div className="lang-select-wrapper">
-              <select
-                className={`${styles.langSelector} form-select form-select-sm ${styles.langSelectorHover} ${styles.langSelectorFocus}`}
-                value={language}
-                onChange={(e) => changeLanguage(e.target.value)}
+            {/* Language Dropdown */}
+            <div
+              ref={languageDropdownRef}
+              className={`dropdown ${styles.dropdownNav}`}
+              onMouseEnter={() => handleMouseEnter(setLanguageDropdownOpen)}
+              onMouseLeave={() => handleMouseLeave(setLanguageDropdownOpen)}
+            >
+              <span
+                className={`${styles.topNavbarLink} ${styles.topNavbarLinkHover} nav-link dropdown-toggle`}
+                data-bs-toggle="dropdown"
+                style={{ cursor: "pointer" }}
               >
-                <option value="en">EN</option>
-                <option value="ar">AR</option>
-              </select>
+                {language.toUpperCase()}
+              </span>
+              <ul className={`dropdown-menu ${styles.productNavDropdown} ${languageDropdownOpen ? "show" : ""}`}>
+                <li>
+                  <button className="dropdown-item" onClick={() => changeLanguage(oppositeLang)}>
+                    {oppositeLang.toUpperCase()}
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -129,6 +214,7 @@ const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+
           <div className="collapse navbar-collapse" id="bottomNavbar">
             <ul className={`${styles.bottomNavbarNav} navbar-nav me-auto mb-2 mb-lg-0`}>
               <li className={`${styles.bottomNavbarNavItem} nav-item`}>
@@ -138,47 +224,27 @@ const Navbar = () => {
               </li>
 
               {/* Products Dropdown */}
-              <li className={`${styles.bottomNavbarNavItem} nav-item dropdown ${styles.dropdownNav}`}>
+              <li
+                ref={productsDropdownRef}
+                className={`nav-item dropdown ${styles.bottomNavbarNavItem} ${styles.dropdownNav}`}
+                onMouseEnter={() => handleMouseEnter(setProductsDropdownOpen)}
+                onMouseLeave={() => handleMouseLeave(setProductsDropdownOpen)}
+              >
                 <span
                   className={`${styles.navLink} ${styles.navLinkHover} nav-link dropdown-toggle`}
-                  id="productsDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  onClick={handleProductsClick}
                   style={{ cursor: "pointer" }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate("/product-list");
-
-                    // Manually close the dropdown
-                    const dropdown = document.getElementById("productsDropdown");
-                    const parentLi = dropdown?.closest("li.dropdown");
-                    parentLi?.classList.remove("show");
-
-                    const menu = parentLi?.querySelector(".dropdown-menu");
-                    menu?.classList.remove("show");
-                  }}
                 >
                   {language === "ar" ? "المنتجات" : "Products"}
                 </span>
 
-                <ul className={`${styles.productNavDropdown} dropdown-menu`} aria-labelledby="productsDropdown">
-                  {[
-                    { key: "jewelry", labelEn: "Jewelry", labelAr: "إكسسوارات" },
-                    { key: "candles", labelEn: "Candles", labelAr: "شموع" },
-                    { key: "crochet", labelEn: "Crochet", labelAr: "كروشيه" },
-                    { key: "ceramic", labelEn: "Ceramics", labelAr: "سيراميك" },
-                    {
-                      key: "home essentials",
-                      labelEn: "Home Essentials",
-                      labelAr: "الاحتياجات المنزلية",
-                    },
-                  ].map(({ key, labelEn, labelAr }) => (
+                <ul className={`dropdown-menu ${styles.productNavDropdown} ${productsDropdownOpen ? "show" : ""}`}>
+                  {categories.map(({ key, labelEn, labelAr }) => (
                     <li key={key}>
                       <button
                         type="button"
                         className={`${styles.productNavDropdownItem} ${styles.productNavDropdownItemHover} dropdown-item`}
-                        onClick={() => handleCategoryNavigation(labelEn)}
+                        onClick={() => handleCategoryNavigation(labelEn, key)}
                       >
                         {language === "ar" ? labelAr : labelEn}
                       </button>
@@ -188,14 +254,8 @@ const Navbar = () => {
               </li>
 
               <li className={`${styles.bottomNavbarNavItem} nav-item`}>
-                <Link to="/offers" className={`${styles.navLink} ${styles.navLinkHover} nav-link`}>
-                  {language === "ar" ? "العروض" : "Offers"}
-                </Link>
-              </li>
-
-              <li className={`${styles.bottomNavbarNavItem} nav-item`}>
                 <Link to="/contact" className={`${styles.navLink} ${styles.navLinkHover} nav-link`}>
-                  {language === "ar" ? "تواصل معنا" : "Contact"}
+                  {language === "ar" ? "تواصل معنا" : "Contact Us"}
                 </Link>
               </li>
             </ul>

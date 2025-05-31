@@ -10,7 +10,6 @@ const NewArrivals = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -37,13 +36,20 @@ const NewArrivals = () => {
       });
   }, []);
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product, e) => {
+    e.stopPropagation();
     addToCart(product);
   };
 
-  const handleBuyNow = (product) => {
+  const handleBuyNow = (product, e) => {
+    e.stopPropagation();
     addToCart(product);
-    navigate('/checkout'); 
+    navigate('/checkout');
+
+    // Scroll to top after navigation with a slight delay
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
   };
 
   if (loading) return <p className={styles.statusMessage}>Loading new arrivals...</p>;
@@ -80,10 +86,7 @@ const NewArrivals = () => {
                   <div className={styles.hoverActions}>
                     <button
                       className={styles.iconButton}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAddToCart(product);
-                      }}
+                      onClick={(e) => handleAddToCart(product, e)}
                       aria-label={`Add to cart: ${product.title}`}
                       title="Add to Cart"
                     >
@@ -91,10 +94,7 @@ const NewArrivals = () => {
                     </button>
                     <button
                       className={`${styles.iconButton} ${styles.buyNowButton}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleBuyNow(product);
-                      }}
+                      onClick={(e) => handleBuyNow(product, e)}
                       aria-label={`Buy now: ${product.title}`}
                       title="Buy Now"
                     >

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../../../Apis/config.js";
 import styles from "./EditProducts.module.css";
+import { FiPlus } from "react-icons/fi"; // ✅ Icon import
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -9,7 +10,7 @@ function ProductsPage() {
   const [editIndex, setEditIndex] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1); // Added page state
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setLoading(true);
@@ -36,10 +37,8 @@ function ProductsPage() {
   }, [page]);
 
   const handleAdd = () => {
-    if (newProduct.name && newProduct.price) {
-      setProducts([...products, newProduct]);
-      setNewProduct({ name: "", price: "" });
-    }
+    setProducts([...products, newProduct]);
+    setNewProduct({ name: "", price: "" });
   };
 
   const handleEdit = (index) => {
@@ -56,13 +55,23 @@ function ProductsPage() {
   };
 
   return (
-    <div className={`container mt-5 ${styles.productsPage}`}>
-      <h2 className="text-center mb-4">Products Dashboard</h2>
+    <div className={`container ${styles.productsPage}`}>
+      <h2 className="text-center">Products Dashboard</h2>
 
       {error && <div className="alert alert-danger">{error}</div>}
       {loading && <div className="alert alert-info">Loading products...</div>}
 
-      <div className={`p-3 mb-4 border rounded ${styles.formSection}`}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (editIndex === null) {
+            handleAdd();
+          } else {
+            handleUpdate();
+          }
+        }}
+        className={`p-3 mb-4 border rounded ${styles.formSection}`}
+      >
         <h5 className="mb-3">
           {editIndex === null ? "Add New Product" : "Edit Product"}
         </h5>
@@ -74,6 +83,7 @@ function ProductsPage() {
           onChange={(e) =>
             setNewProduct({ ...newProduct, name: e.target.value })
           }
+          required
         />
         <input
           type="number"
@@ -83,32 +93,34 @@ function ProductsPage() {
           onChange={(e) =>
             setNewProduct({ ...newProduct, price: e.target.value })
           }
+          required
+          min="0"
+          step="0.01"
         />
-        {editIndex === null ? (
-          <button
-            className={`btn w-100 ${styles.customAddBtn}`}
-            onClick={handleAdd}
-          >
-            ➕ Add Product
-          </button>
-        ) : (
-          <button
-            className={`btn w-100 ${styles.btnWarning}`}
-            onClick={handleUpdate}
-          >
-            ✏️ Update Product
-          </button>
-        )}
-      </div>
+        <button
+          type="submit"
+          className={`btn w-100 ${
+            editIndex === null ? styles.customAddBtn : styles.btnWarning
+          }`}
+        >
+          {editIndex === null ? (
+            <span className="d-flex align-items-center justify-content-center gap-2">
+              <FiPlus color="white" size={22} />
+              Add Product
+            </span>
+          ) : (
+            "Update Product"
+          )}
+        </button>
+      </form>
 
       <table
         className={`table table-hover table-bordered text-center ${styles.tableStyle}`}
       >
         <thead className={styles.tableHead}>
           <tr>
-            <th>#</th>
             <th>Name</th>
-            <th>Price ($)</th>
+            <th>Price (EGP)</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -117,7 +129,6 @@ function ProductsPage() {
           {products.length > 0 ? (
             products.map((p, i) => (
               <tr key={i}>
-                <td className={styles.tableCell}>{i + 1}</td>
                 <td className={styles.tableCell}>{p.name || p.title}</td>
                 <td className={styles.tableCell}>{p.price}</td>
                 <td className={styles.tableCell}>
@@ -132,7 +143,7 @@ function ProductsPage() {
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-muted">
+              <td colSpan="3" className="text-muted">
                 No products found
               </td>
             </tr>
@@ -140,21 +151,25 @@ function ProductsPage() {
         </tbody>
       </table>
 
-      {/* Optional Pagination Controls */}
-      <div className="d-flex justify-content-between mt-3">
+      <div
+        className={`d-flex justify-content-center align-items-center gap-3 mt-4 ${styles.paginationWrapper}`}
+      >
         <button
-          className="btn btn-outline-secondary"
+          className={styles.paginationBtn}
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
         >
-          ◀ Previous
+          Previous
         </button>
-        <span className="align-self-center">Page {page}</span>
+
+        <span className={styles.pageNumber}>Page {page}</span>
+
         <button
-          className="btn btn-outline-secondary"
+          className={styles.paginationBtn}
           onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === 3} // Replace with a dynamic condition if needed
         >
-          Next ▶
+          Next
         </button>
       </div>
     </div>

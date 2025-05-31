@@ -6,7 +6,7 @@ function AdminView() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editId, setEditId] = useState(null);
+  const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({
     title: "",
     price: "",
@@ -40,37 +40,28 @@ function AdminView() {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      const filtered = products.filter((product) => product.id !== id);
-      const reIndexed = filtered.map((product, index) => ({
-        ...product,
-        id: index + 1,
-      }));
-      setProducts(reIndexed);
+      setProducts(products.filter((product) => product.id !== id));
     }
   };
 
-  const handleEdit = (product) => {
-    setEditId(product.id);
+  const handleEdit = (index) => {
+    setEditIndex(index);
     setEditData({
-      title: product.title,
-      price: product.price,
-      category: product.category,
+      title: products[index].title,
+      price: products[index].price,
+      category: products[index].category,
     });
   };
 
-  const handleSave = (id) => {
-    const updatedProducts = products.map((product) => {
-      if (product.id === id) {
-        return { ...product, ...editData };
-      }
-      return product;
-    });
+  const handleSave = () => {
+    const updatedProducts = [...products];
+    updatedProducts[editIndex] = { ...updatedProducts[editIndex], ...editData };
     setProducts(updatedProducts);
-    setEditId(null);
+    setEditIndex(null);
   };
 
   const handleCancel = () => {
-    setEditId(null);
+    setEditIndex(null);
   };
 
   const handleChange = (e) => {
@@ -98,7 +89,6 @@ function AdminView() {
       <table className={`table table-bordered table-hover table-striped ${styles.table}`}>
         <thead className={styles.tableHead}>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Price</th>
             <th>Category</th>
@@ -106,11 +96,9 @@ function AdminView() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td className={styles.tableCell}>{product.id}</td>
-
-              {editId === product.id ? (
+          {products.map((product, index) => (
+            <tr key={product.id || index}>
+              {editIndex === index ? (
                 <>
                   <td className={styles.tableCell}>
                     <input
@@ -147,13 +135,12 @@ function AdminView() {
                   <td className={styles.tableCell}>{product.category}</td>
                 </>
               )}
-
               <td className={styles.tableCell}>
                 <div className={styles.actionButtons}>
-                  {editId === product.id ? (
+                  {editIndex === index ? (
                     <>
                       <button
-                        onClick={() => handleSave(product.id)}
+                        onClick={handleSave}
                         className={`btn ${styles.btnSuccess}`}
                       >
                         Save
@@ -168,7 +155,7 @@ function AdminView() {
                   ) : (
                     <>
                       <button
-                        onClick={() => handleEdit(product)}
+                        onClick={() => handleEdit(index)}
                         className={`btn btn-sm ${styles.btnWarning}`}
                       >
                         Edit
@@ -187,6 +174,25 @@ function AdminView() {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Buttons */}
+      <div className={styles.pagination}>
+        <button
+          className={`btn btn-outline-primary ${styles.pageButton}`}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </button>
+        <span className={styles.pageInfo}>Page {page}</span>
+        <button
+          className={`btn btn-outline-primary ${styles.pageButton}`}
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === 3}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

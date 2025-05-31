@@ -36,12 +36,14 @@ function Signup() {
     if (Object.keys(formErrors).length > 0) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, password, role }),
-      });
-
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, lastName, email, password, role }),
+        }
+      );
 
       const data = await res.json();
 
@@ -51,8 +53,8 @@ function Signup() {
       }
 
       localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-      navigate("/dashboard");
-    } catch (err) {
+      navigate("/login");
+    } catch {
       alert("Something went wrong. Please try again.");
     }
   };
@@ -67,7 +69,9 @@ function Signup() {
               <label className={styles.formLabel}>First Name</label>
               <input
                 type="text"
-                className={`form-control form-control-lg rounded-3 ${errors.firstName ? "is-invalid" : ""}`}
+                className={`form-control form-control-lg rounded-3 ${
+                  errors.firstName ? "is-invalid" : ""
+                }`}
                 value={firstName}
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -82,7 +86,9 @@ function Signup() {
               <label className={styles.formLabel}>Last Name</label>
               <input
                 type="text"
-                className={`form-control form-control-lg rounded-3 ${errors.lastName ? "is-invalid" : ""}`}
+                className={`form-control form-control-lg rounded-3 ${
+                  errors.lastName ? "is-invalid" : ""
+                }`}
                 value={lastName}
                 onChange={(e) => {
                   setLastName(e.target.value);
@@ -99,20 +105,26 @@ function Signup() {
             <label className={styles.formLabel}>Email address</label>
             <input
               type="email"
-              className={`form-control form-control-lg rounded-3 ${errors.email ? "is-invalid" : ""}`}
+              className={`form-control form-control-lg rounded-3 ${
+                errors.email ? "is-invalid" : ""
+              }`}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
                 setErrors({ ...errors, email: "" });
               }}
             />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            {errors.email && (
+              <div className="invalid-feedback">{errors.email}</div>
+            )}
           </div>
 
           <div className="mb-3">
             <label className={styles.formLabel}>Role</label>
             <select
-              className={`form-select form-select-lg rounded-3 ${errors.role ? "is-invalid" : ""}`}
+              className={`form-select form-select-lg rounded-3 ${
+                errors.role ? "is-invalid" : ""
+              }`}
               value={role}
               onChange={(e) => {
                 setRole(e.target.value);
@@ -123,28 +135,36 @@ function Signup() {
               <option value="Seller">Seller</option>
               <option value="Admin">Admin</option>
             </select>
-            {errors.role && <div className="invalid-feedback">{errors.role}</div>}
+            {errors.role && (
+              <div className="invalid-feedback">{errors.role}</div>
+            )}
           </div>
 
           <div className="mb-3">
             <label className={styles.formLabel}>Password</label>
             <input
               type="password"
-              className={`form-control form-control-lg rounded-3 ${errors.password ? "is-invalid" : ""}`}
+              className={`form-control form-control-lg rounded-3 ${
+                errors.password ? "is-invalid" : ""
+              }`}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
                 setErrors({ ...errors, password: "" });
               }}
             />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+            {errors.password && (
+              <div className="invalid-feedback">{errors.password}</div>
+            )}
           </div>
 
           <div className="mb-4">
             <label className={styles.formLabel}>Confirm Password</label>
             <input
               type="password"
-              className={`form-control form-control-lg rounded-3 ${errors.confirmPassword ? "is-invalid" : ""}`}
+              className={`form-control form-control-lg rounded-3 ${
+                errors.confirmPassword ? "is-invalid" : ""
+              }`}
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
@@ -163,15 +183,9 @@ function Signup() {
             Sign Up
           </button>
 
-          <div className="text-center mt-4">
+          <div className={styles.loginPrompt}>
             <small>
-              Already have an account?{" "}
-              <a
-                href="/login"
-                className="text-decoration-none text-primary fw-semibold"
-              >
-                Login
-              </a>
+              Already have an account? <a href="/login">Login</a>
             </small>
           </div>
         </form>

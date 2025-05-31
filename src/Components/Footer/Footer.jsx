@@ -5,14 +5,13 @@ import { FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 const Footer = () => {
   return (
     <footer className={`${styles['custom-footer']} footer py-3`}>
-      <div className="container d-flex align-items-center justify-content-center position-relative">
+      <div className="container d-flex align-items-center justify-content-center position-relative flex-wrap">
         {/* Logo aligned left */}
         <img
           src="/logo.jpg"
           alt="Local Market Logo"
           className={styles.logoImage}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          style={{ position: 'absolute', left: '1rem', cursor: 'pointer' }}
         />
 
         {/* Centered content */}

@@ -70,10 +70,7 @@ const ProductCard = ({ product, page }) => {
         <div className={styles.priceContainer}>
           <p className={styles.price}>{product.price}</p>
           <span className={styles.currency}>EGP</span>
-          <p
-            className={styles.stockStatus}
-            style={{ color: stockColor }}
-          >
+          <p className={styles.stockStatus} style={{ color: stockColor }}>
             {stockStatus || "\u00A0"}
           </p>
         </div>
