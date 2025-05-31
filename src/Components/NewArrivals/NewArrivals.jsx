@@ -40,16 +40,14 @@ const NewArrivals = () => {
     e.stopPropagation();
     addToCart(product);
   };
-
   const handleBuyNow = (product, e) => {
     e.stopPropagation();
     addToCart(product);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // for smooth scrolling
+    });
     navigate('/checkout');
-
-    // Scroll to top after navigation with a slight delay
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 100);
   };
 
   if (loading) return <p className={styles.statusMessage}>Loading new arrivals...</p>;

@@ -45,6 +45,7 @@ const FeaturedProduct = () => {
     e.stopPropagation();
     addToCart(product);
     navigate('/checkout');
+    window.scrollTo(0, 0); // This will make the checkout page start at the top
   };
 
   if (loading) return <p className={styles.statusMessage}>Loading featured products...</p>;

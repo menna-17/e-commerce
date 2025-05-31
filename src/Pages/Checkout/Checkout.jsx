@@ -35,9 +35,10 @@ const egyptGovernorates = [
 
 
 const Checkout = () => {
+  
   const navigate = useNavigate();
   const { cart, updateQuantity, removeFromCart } = useCart();
-
+ 
   const increaseQuantity = (productId) => {
     const item = cart.find((item) => (item._id || item.id) === productId);
     if (!item) return;
@@ -172,6 +173,7 @@ const Checkout = () => {
       alert("Please fix the errors in the form before submitting.");
     }
   };
+  
 
   return (
     <div className={styles.checkoutContainer}>
