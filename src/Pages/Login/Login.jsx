@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./Login.module.css";
+import { useAuth } from "../../Context/Auth"; // context
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,8 @@ function Login() {
   const [passwordError, setPasswordError] = useState("");
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+
+  const { login } = useAuth(); // from context
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,14 +36,11 @@ function Login() {
     if (!isValid) return;
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await res.json();
 
@@ -49,7 +49,8 @@ function Login() {
         return;
       }
 
-      localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+      login(data.user); // update context
+      localStorage.setItem("token", data.token); // save token
       navigate("/");
     } catch {
       setServerError("Something went wrong. Please try again.");
@@ -59,36 +60,28 @@ function Login() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        <h2 className="text-center mb-4 fw-bold">Login</h2>
+        <h2 className={`text-center fw-bold ${styles.heading}`}>Login</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
-            <label className={styles.formLabel}>Email address</label>
+            <label className={`form-label ${styles.formLabel}`}>Email address</label>
             <input
               type="email"
-              className={`form-control form-control-lg rounded-3 ${
-                emailError ? "is-invalid" : ""
-              }`}
+              className={`form-control ${styles.inputField} ${emailError ? "is-invalid" : ""}`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {emailError && (
-              <div className="invalid-feedback">{emailError}</div>
-            )}
+            {emailError && <div className="invalid-feedback">{emailError}</div>}
           </div>
 
           <div className="mb-3">
-            <label className={styles.formLabel}>Password</label>
+            <label className={`form-label ${styles.formLabel}`}>Password</label>
             <input
               type="password"
-              className={`form-control form-control-lg rounded-3 ${
-                passwordError ? "is-invalid" : ""
-              }`}
+              className={`form-control ${styles.inputField} ${passwordError ? "is-invalid" : ""}`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {passwordError && (
-              <div className="invalid-feedback">{passwordError}</div>
-            )}
+            {passwordError && <div className="invalid-feedback">{passwordError}</div>}
 
             <div className={styles.forgotPasswordWrapper}>
               <a href="/forgot-password" className={styles.forgotPasswordLink}>
@@ -97,20 +90,15 @@ function Login() {
             </div>
           </div>
 
-          {serverError && (
-            <div className="text-danger text-center mb-2">{serverError}</div>
-          )}
+          {serverError && <div className="text-danger text-center mb-2">{serverError}</div>}
 
-          <button
-            type="submit"
-            className={`btn btn-lg w-100 rounded-3 shadow-sm ${styles.customLoginBtn}`}
-          >
+          <button type="submit" className={`btn btn-lg w-100 rounded-3 shadow-sm ${styles.customLoginBtn}`}>
             Login
           </button>
 
           <div className={styles.loginPrompt}>
             <small>
-              Don&apos;t have an account? <a href="/signup">Sign Up</a>
+              Don't have an account? <a href="/signup">Sign Up</a>
             </small>
           </div>
         </form>

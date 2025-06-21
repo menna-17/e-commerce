@@ -1,14 +1,9 @@
-/* ===========================
-   Global page background
-=========================== */
+
 :global(body) {
   background-color: #c7d5e1 !important;
   font-family: 'Josefin Sans', sans-serif;
 }
 
-/* ===========================
-   Global input and textarea fixes
-=========================== */
 input,
 textarea {
   width: 100%;
@@ -31,7 +26,7 @@ textarea:focus {
   outline-color: #093866;
 }
 
-/* Fix caret on smaller screens like iPhone */
+
 @media only screen and (max-width: 991.98px) {
   input,
   textarea {
@@ -39,9 +34,6 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Top Navbar Styles
-=========================== */
 .topNavbar {
   background-color: #093866 !important;
   display: flex;
@@ -70,16 +62,14 @@ textarea:focus {
   flex-wrap: wrap;
 }
 
-/* Always make cartIcon order 0 to appear first on all screen sizes */
+
 .cartIcon {
   order: 0 !important;
   margin-left: 0 !important;
   font-size: 24px !important;
 }
 
-/* ===========================
-   Cart Badge Styles
-=========================== */
+
 .cartBadge {
   font-size: 0.7rem !important;
   padding: 0.2em 0.4em !important;
@@ -102,9 +92,7 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Responsive layout - Mobile & Tablet (up to 991.98px)
-=========================== */
+
 @media (max-width: 991.98px) {
   .topNavbar {
     flex-direction: column-reverse;
@@ -119,7 +107,7 @@ textarea:focus {
     flex-wrap: wrap;
   }
 
-  /* Hide login/signup and dropdowns on mobile in top navbar */
+
   .topNavRight .topNavbarLink:not(.cartIcon),
   .dashboardDropdownWrapper,
   .langSelectorWrapper {
@@ -127,9 +115,7 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Bottom Navbar Styles
-=========================== */
+
 .bottomNavbar {
   background-color: #c7d5e1 !important;
   margin-top: 10px;
@@ -178,21 +164,21 @@ textarea:focus {
     gap: 0.75rem;
   }
 
-  /* Mobile-specific nav items */
+
   .bottomNavbarNavItem {
     margin: 0 !important;
     width: 100%;
   }
 
-  /* Show mobile-only items */
+ 
   .mobile-only {
     display: block !important;
   }
 }
 
-/* Desktop (992px and up) will use desktop styles */
+
 @media (min-width: 992px) {
-  /* Hide mobile-only items on desktop */
+
   .mobile-only {
     display: none !important;
   }
@@ -201,7 +187,7 @@ textarea:focus {
     margin: 0 20px;
   }
 
-  /* Restore desktop navbar layouts */
+
   .topNavbar {
     flex-direction: row;
     align-items: center;
@@ -213,7 +199,7 @@ textarea:focus {
     justify-content: flex-end;
   }
 
-  /* Show desktop items */
+
   .topNavRight .topNavbarLink:not(.cartIcon),
   .dashboardDropdownWrapper,
   .langSelectorWrapper {
@@ -232,16 +218,14 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Dropdown Wrappers - Unified Styles
-=========================== */
+
 .dropdownNav,
 .dashboardDropdownWrapper,
 .langSelectorWrapper {
   position: relative;
 }
 
-/* All dropdown menus */
+
 .productNavDropdown,
 .dashboardDropdown,
 .langDropdown {
@@ -260,7 +244,7 @@ textarea:focus {
   color: #004666 !important;
 }
 
-/* Mobile dropdown styles (phones and tablets) */
+
 @media (max-width: 991.98px) {
   .productNavDropdown.show {
     display: block !important;
@@ -273,7 +257,7 @@ textarea:focus {
     margin-top: 0.25rem;
   }
 
-  /* Keep dashboard and language dropdowns styled like desktop on mobile */
+
   .dashboardDropdown.show,
   .langDropdown.show {
     display: block !important;
@@ -290,14 +274,14 @@ textarea:focus {
     margin-right: 0.255em;
   }
 
-  /* Style for active dropdown on mobile */
+
   .dropdown.show .dropdown-toggle {
     color: #093866 !important;
     font-weight: bold;
   }
 }
 
-/* Desktop hover effects */
+
 @media (min-width: 992px) {
   .navLink:hover {
     color: grey !important;
@@ -318,15 +302,13 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Language Dropdown Specific Styles
-=========================== */
+
 .langSelectorWrapper {
   position: relative;
   display: inline-block;
 }
 
-/* Toggle button */
+
 .langSelectorWrapper .dropdown-toggle {
   width: 50px !important;
   height: 30px !important;
@@ -344,7 +326,7 @@ textarea:focus {
   cursor: pointer;
 }
 
-/* Dropdown menu */
+
 .langSelectorWrapper .langDropdown {
   width: 60px !important;
   min-width: unset !important;
@@ -357,16 +339,25 @@ textarea:focus {
   text-align: center !important;
 }
 
-/* Dropdown items */
+
 .langDropdownItem {
   padding: 0.25rem 0 !important;
   font-size: 14px !important;
   color: #004666 !important;
   text-align: center !important;
   transition: all 0.2s ease;
+  
+}
+.productNavDropdownItem:hover,
+.dashboardDropdownItem:hover,
+.langDropdownItem:hover {
+  background-color:#d1cbcb !important;
+
 }
 
-/* Dropdown arrow */
+
+
+
 .langSelectorWrapper .dropdown-toggle::after {
   margin-left: 0.255em !important;
   vertical-align: 0.15em !important;
@@ -375,9 +366,7 @@ textarea:focus {
   border-left: 0.3em solid transparent !important;
 }
 
-/* ===========================
-   Dropdown Items Styles
-=========================== */
+
 .productNavDropdownItem,
 .dashboardDropdownItem,
 .langDropdownItem {
@@ -399,7 +388,7 @@ textarea:focus {
     font-size: 16px;
   }
 
-  /* Keep dashboard and language dropdown items styled like desktop on mobile */
+
   .dashboardDropdownItem,
   .langDropdownItem {
     padding: 0.5rem 0.75rem !important;
@@ -407,9 +396,7 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Logo Image
-=========================== */
+
 .logoImage {
   width: 150px;
   height: 70px;
@@ -427,11 +414,8 @@ textarea:focus {
   }
 }
 
-/* ===========================
-   Mobile Navigation Enhancements (phones and tablets)
-=========================== */
 @media (max-width: 991.98px) {
-  /* Remove hover effects for mobile */
+ 
   .navLink:hover,
   .topNavbarLink:hover,
   .cartIcon:hover,
@@ -444,19 +428,19 @@ textarea:focus {
     text-decoration: none !important;
   }
 
-  /* Make product dropdown items full width */
+
   .productNavDropdown .dropdown-item {
     width: 100%;
     text-align: left;
   }
 
-  /* Keep dashboard and language dropdown items at their original width */
+
   .dashboardDropdown .dropdown-item,
   .langDropdown .dropdown-item {
     width: auto;
   }
 
-  /* Adjust mobile dropdown toggle appearance */
+
   .dropdown-toggle {
     display: flex;
     justify-content: space-between;
@@ -464,12 +448,12 @@ textarea:focus {
     width: 100%;
   }
 
-  /* Add visual indicator for open dropdowns */
+
   .dropdown.show .dropdown-toggle::after {
     transform: rotate(180deg);
   }
 
-  /* Specific mobile styles for dashboard dropdown */
+
   .dashboardDropdown {
     min-width: 140px !important;
     width: auto !important;
@@ -480,7 +464,7 @@ textarea:focus {
     font-size: 13px !important;
   }
 
-  /* Language dropdown mobile styles */
+  
   .langDropdown {
     width: 60px !important;
     min-width: unset !important;

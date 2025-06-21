@@ -6,7 +6,7 @@ function AdminView() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     title: "",
     price: "",
@@ -20,15 +20,17 @@ function AdminView() {
       .get(`/api/products?page=${page}`)
       .then((res) => {
         const data = res.data;
+        let productsData = [];
         if (Array.isArray(data)) {
-          setProducts(data);
+          productsData = data;
         } else if (Array.isArray(data.products)) {
-          setProducts(data.products);
+          productsData = data.products;
         } else if (data.data && Array.isArray(data.data.products)) {
-          setProducts(data.data.products);
+          productsData = data.data.products;
         } else {
           throw new Error("Unexpected API response structure");
         }
+        setProducts(productsData);
         setLoading(false);
       })
       .catch((err) => {
@@ -40,28 +42,46 @@ function AdminView() {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      setProducts(products.filter((product) => product.id !== id));
+      axiosInstance
+        .delete(`/api/products/${id}`)
+        .then(() => {
+          setProducts((prev) => prev.filter((product) => product._id !== id));
+          if (editId === id) setEditId(null); // لو بتعدل نفس المنتج المحذوف نلغي التعديل
+        })
+        .catch((err) => {
+          console.error("Failed to delete product:", err);
+          alert("Error deleting product");
+        });
     }
   };
 
-  const handleEdit = (index) => {
-    setEditIndex(index);
+  const handleEdit = (product) => {
+    setEditId(product._id);
     setEditData({
-      title: products[index].title,
-      price: products[index].price,
-      category: products[index].category,
+      title: product.title || "",
+      price: product.price || "",
+      category: product.category || "",
     });
   };
 
-  const handleSave = () => {
-    const updatedProducts = [...products];
-    updatedProducts[editIndex] = { ...updatedProducts[editIndex], ...editData };
-    setProducts(updatedProducts);
-    setEditIndex(null);
+  const handleSave = (id) => {
+    // هنا ممكن تبعت الطلب للسيرفر لتحديث المنتج في الداتا بيز
+    axiosInstance
+      .put(`/api/products/${id}`, editData)
+      .then((res) => {
+        setProducts((prev) =>
+          prev.map((product) => (product._id === id ? res.data : product))
+        );
+        setEditId(null);
+      })
+      .catch((err) => {
+        console.error("Failed to update product:", err);
+        alert("Error updating product");
+      });
   };
 
   const handleCancel = () => {
-    setEditIndex(null);
+    setEditId(null);
   };
 
   const handleChange = (e) => {
@@ -86,19 +106,21 @@ function AdminView() {
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Admin - Products</h1>
-      <table className={`table table-bordered table-hover table-striped ${styles.table}`}>
+      <table
+        className={`table table-bordered table-hover table-striped ${styles.table}`}
+      >
         <thead className={styles.tableHead}>
           <tr>
             <th>Name</th>
-            <th>Price</th>
+            <th>Price (EGP)</th>
             <th>Category</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
-            <tr key={product.id || index}>
-              {editIndex === index ? (
+          {products.map((product) => (
+            <tr key={product._id}>
+              {editId === product._id ? (
                 <>
                   <td className={styles.tableCell}>
                     <input
@@ -131,16 +153,17 @@ function AdminView() {
               ) : (
                 <>
                   <td className={styles.tableCell}>{product.title}</td>
-                  <td className={styles.tableCell}>${product.price}</td>
+                  <td className={styles.tableCell}>{product.price}</td>
                   <td className={styles.tableCell}>{product.category}</td>
                 </>
               )}
+
               <td className={styles.tableCell}>
                 <div className={styles.actionButtons}>
-                  {editIndex === index ? (
+                  {editId === product._id ? (
                     <>
                       <button
-                        onClick={handleSave}
+                        onClick={() => handleSave(product._id)}
                         className={`btn ${styles.btnSuccess}`}
                       >
                         Save
@@ -155,13 +178,13 @@ function AdminView() {
                   ) : (
                     <>
                       <button
-                        onClick={() => handleEdit(index)}
+                        onClick={() => handleEdit(product)}
                         className={`btn btn-sm ${styles.btnWarning}`}
                       >
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete(product._id)}
                         className={`btn btn-sm ${styles.btnDanger}`}
                       >
                         Delete
@@ -175,7 +198,6 @@ function AdminView() {
         </tbody>
       </table>
 
-      {/* Pagination Buttons */}
       <div className={styles.pagination}>
         <button
           className={`btn btn-outline-primary ${styles.pageButton}`}
@@ -188,7 +210,6 @@ function AdminView() {
         <button
           className={`btn btn-outline-primary ${styles.pageButton}`}
           onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === 3}
         >
           Next
         </button>

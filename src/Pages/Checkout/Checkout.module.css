@@ -38,7 +38,7 @@
 .formGroup select {
   padding: 12px;
   font-size: 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   width: 100%;
   background-color: #fff;
@@ -47,7 +47,7 @@
   box-sizing: border-box;
 }
 
-/* Improved Select Input Styling */
+
 .selectInput {
   appearance: none;
   -webkit-appearance: none;
@@ -59,14 +59,14 @@
   cursor: pointer;
 }
 
-/* Payment Method Select Specific Styling */
+
 .formGroup select[name="paymentMethod"] {
   font-weight: 600;
   background-color: #f8f9fa;
   border: 2px solid #e9ecef;
 }
 
-/* Governate Select Specific Styling */
+
 .formGroup select[name="governate"] {
   font-weight: 500;
 }
@@ -239,7 +239,6 @@ select:focus {
   box-shadow: 0 0 2px #093866;
 }
 
-/* ------------------ RESPONSIVE STYLES ------------------ */
 
 @media (max-width: 480px) {
   .checkoutContainer {
@@ -273,7 +272,7 @@ select:focus {
     min-height: 44px;
   }
 
-  /* Select inputs */
+
   .selectInput {
     padding: 10px 12px;
     background-position: right 10px center;
@@ -281,14 +280,14 @@ select:focus {
     padding-right: 2.2em;
   }
 
-  /* Payment method select */
+ 
   .formGroup select[name="paymentMethod"] {
     font-size: 0.95rem;
     border-width: 1px;
     background-color: #f5f7fa;
   }
 
-  /* Governate select */
+
   .formGroup select[name="governate"] {
     font-weight: 500;
     font-size: 0.95rem;
@@ -302,8 +301,8 @@ select:focus {
   }
 
   .itemDetails {
-    gap: 8px;
-    width: 100%;
+    gap: 0px;
+    width: 50%;
   }
 
   .itemDetails img {
@@ -381,19 +380,19 @@ select:focus {
     min-height: 46px;
   }
 
-  /* Select inputs */
+
   .selectInput {
     background-size: 0.95em;
     padding-right: 2.3em;
   }
 
-  /* Payment method select */
+
   .formGroup select[name="paymentMethod"] {
     font-size: 1rem;
     border-width: 1.5px;
   }
 
-  /* Governate select */
+
   .formGroup select[name="governate"] {
     font-size: 0.98rem;
   }
@@ -420,13 +419,13 @@ select:focus {
     padding: 12px;
   }
 
-  /* Adjust select inputs for tablet */
+
   .selectInput {
     padding: 12px;
     background-position: right 12px center;
   }
 
-  /* Payment method select */
+
   .formGroup select[name="paymentMethod"] {
     font-size: 1.05rem;
     border-width: 1.5px;
@@ -457,5 +456,5 @@ select:focus {
 }
 
 @media (min-width: 1025px) {
-  /* Original desktop styles apply */
+ 
 }
