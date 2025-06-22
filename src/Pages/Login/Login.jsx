@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./Login.module.css";
-import { useAuth } from "../../Context/Auth"; // context
+import { useAuth } from "../../Context/Auth";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ function Login() {
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
 
-  const { login } = useAuth(); // from context
+  const { login } = useAuth(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,11 +37,14 @@ function Login() {
     if (!isValid) return;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
 
@@ -49,8 +53,8 @@ function Login() {
         return;
       }
 
-      login(data.user); // update context
-      localStorage.setItem("token", data.token); // save token
+      login(data.user); 
+      localStorage.setItem("token", data.token); 
       navigate("/");
     } catch {
       setServerError("Something went wrong. Please try again.");
@@ -92,13 +96,16 @@ function Login() {
 
           {serverError && <div className="text-danger text-center mb-2">{serverError}</div>}
 
-          <button type="submit" className={`btn btn-lg w-100 rounded-3 shadow-sm ${styles.customLoginBtn}`}>
+          <button
+            type="submit"
+            className={`btn btn-lg w-100 rounded-3 shadow-sm ${styles.customLoginBtn}`}
+          >
             Login
           </button>
 
           <div className={styles.loginPrompt}>
             <small>
-              Don't have an account? <a href="/signup">Sign Up</a>
+              Don't have an account? <Link to="/signup">Sign Up</Link>
             </small>
           </div>
         </form>
