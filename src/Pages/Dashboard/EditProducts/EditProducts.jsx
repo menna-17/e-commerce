@@ -4,11 +4,11 @@ import axiosInstance from "../../../Apis/config.js";
 import styles from "./EditProducts.module.css";
 
 const categories = [
-  { key: "jewelry", image: "jewelry.jpeg" },
-  { key: "crochet", image: "crochet.jpeg" },
-  { key: "candles", image: "candles.jpeg" },
-  { key: "ceramic", image: "ceramic.jpeg" },
-  { key: "home_essential", image: "homeess.jpeg" },
+  { key: "Jewelry", image: "jewelry.jpeg" },
+  { key: "Crochet", image: "crochet.jpeg" },
+  { key: "Candles", image: "candles.jpeg" },
+  { key: "Ceramic", image: "ceramic.jpeg" },
+  { key: "Home essential", image: "homeess.jpeg" },
 ];
 
 function ProductsPage() {
