@@ -3,14 +3,6 @@
   font-family: 'Josefin Sans', sans-serif;
 }
 
-  .topNavbarLink:hover,
-  .topNavbarBrand:hover,
-  .cartIcon:hover {
-    color: #efeaeac4 !important;
-    text-decoration: none;
-  }
- 
-
 input,
 textarea {
   width: 100%;
@@ -27,6 +19,7 @@ textarea {
   outline-color: transparent;
   transition: outline-color 0.3s ease;
 }
+
 
 input:focus,
 textarea:focus {
@@ -234,6 +227,29 @@ textarea:focus {
 }
 
 
+
+
+
+
+
+.langBox {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  color: rgba(245, 248, 248, 0.9) !important; 
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.langBox:hover {
+  color: #efeaeac4 !important;
+  cursor: pointer;
+}
+
+
+
+
+
+
 .productNavDropdown,
 .dashboardDropdown,
 .langDropdown {
@@ -296,6 +312,13 @@ textarea:focus {
     text-decoration: none;
   }
 
+  .topNavbarLink:hover,
+  .topNavbarBrand:hover,
+  .cartIcon:hover {
+    color: #efeaeac4 !important;
+    text-decoration: none;
+  }
+
   .dropdownNav:hover .productNavDropdown,
   .dashboardDropdownWrapper:hover .dashboardDropdown,
   .langSelectorWrapper:hover .langDropdown {
@@ -328,7 +351,7 @@ textarea:focus {
 }
 
 
-.langSelectorWrapper .langDropdown {
+.langSelectorWrapper .langBox {
   width: 60px !important;
   min-width: unset !important;
   padding: 0.25rem 0 !important;
@@ -409,7 +432,15 @@ textarea:focus {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.langHideOnMobile {
+  display: block;
+}
 
+@media (max-width: 991px) {
+  .langHideOnMobile {
+    display: none !important;
+  }
+}
 
 
 
@@ -488,7 +519,17 @@ textarea:focus {
 
 @media (max-width: 991.98px) {
 
-
+  .navLink:hover,
+  .topNavbarLink:hover,
+  .cartIcon:hover,
+  .topNavbarBrand:hover,
+  .productNavDropdownItem:hover,
+  .dashboardDropdownItem:hover,
+  .langDropdownItem:hover {
+    color: inherit !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+  }
 
 
   .productNavDropdown .dropdown-item {

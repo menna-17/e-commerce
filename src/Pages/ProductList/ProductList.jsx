@@ -16,7 +16,7 @@ const ProductList = () => {
   const initialCategory = params.get("category") || "";
   const initialSearch = params.get("search") || "";
   const initialMinPrice = parseInt(params.get("minPrice")) || 0;
-  const initialMaxPrice = parseInt(params.get("maxPrice")) || 1000;
+  const initialMaxPrice = parseInt(params.get("maxPrice")) || 2000;
 
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState([]);
@@ -32,19 +32,7 @@ const ProductList = () => {
 
   const categories = isArabic
     ? ["كل المنتجات", "إكسسوارات", "شموع", "كروشيه", "سيراميك", "الاحتياجات المنزلية"]
-    : ["All Products", "Jewelry", "Candles", "Crochet", "Ceramics", "Home Essentials"];
-
-  const translatedCategory = (eng) => {
-    const map = {
-      "All Products": "كل المنتجات",
-      Jewelry: "إكسسوارات",
-      Candles: "شموع",
-      Crochet: "كروشيه",
-      Ceramics: "سيراميك",
-      "Home Essentials": "الاحتياجات المنزلية",
-    };
-    return isArabic ? map[eng] || eng : eng;
-  };
+    : ["All Products", "Jewelry", "Candles", "Crochet", "Ceramics", "Home Essential"];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,9 +45,7 @@ const ProductList = () => {
     setLoading(true);
     const params = {
       page,
-      ...(category && category !== (isArabic ? "كل المنتجات" : "All Products") && {
-        category,
-      }),
+      ...(category && category !== (isArabic ? "كل المنتجات" : "All Products") && { category }),
       minPrice: priceRange[0],
       maxPrice: priceRange[1],
       ...(debouncedSearch && { search: debouncedSearch }),
@@ -85,18 +71,17 @@ const ProductList = () => {
         setLoading(false);
         console.error("Error fetching products:", err);
       });
-  }, [page, category, priceRange, debouncedSearch]);
+  }, [page, category, priceRange, debouncedSearch, isArabic]);
 
   useEffect(() => {
     setPage(1);
   }, [category, priceRange, debouncedSearch]);
 
-  // ✅ Save the last visited URL with query params
   useEffect(() => {
     const queryParams = new URLSearchParams();
     if (category) queryParams.set("category", category);
     if (search) queryParams.set("search", search);
-    if (priceRange[0] !== 0 || priceRange[1] !== 1000) {
+    if (priceRange[0] !== 0 || priceRange[1] !== 2000) {
       queryParams.set("minPrice", priceRange[0]);
       queryParams.set("maxPrice", priceRange[1]);
     }
@@ -106,10 +91,13 @@ const ProductList = () => {
     localStorage.setItem("lastShoppingPage", fullURL);
   }, [category, search, priceRange]);
 
-  if (loading)
+  if (loading) {
     return <div className={styles.loading}>{isArabic ? "جارٍ تحميل المنتجات..." : "Loading products..."}</div>;
+  }
 
-  if (error) return <div className={styles.error}>{error}</div>;
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
 
   return (
     <div className={styles.container} dir={isArabic ? "rtl" : "ltr"}>
