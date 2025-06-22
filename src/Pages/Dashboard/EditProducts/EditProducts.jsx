@@ -61,6 +61,7 @@ function ProductsPage() {
         const payload = {
           ...newProduct,
           title: newProduct.name,
+          images: newProduct.image ? [newProduct.image] : [],
         };
 
         const res = await axiosInstance.post("/api/products", payload, {
@@ -87,7 +88,11 @@ function ProductsPage() {
   };
 
   const handleEdit = (index) => {
-    setNewProduct(products[index]);
+    const p = products[index];
+    setNewProduct({
+      ...p,
+      image: Array.isArray(p.images) && p.images.length > 0 ? p.images[0] : "",
+    });
     setEditIndex(index);
   };
 
@@ -99,6 +104,7 @@ function ProductsPage() {
       const payload = {
         ...newProduct,
         title: newProduct.name,
+        images: newProduct.image ? [newProduct.image] : [],
       };
 
       const res = await axiosInstance.put(
@@ -195,7 +201,10 @@ function ProductsPage() {
           min="0"
           value={newProduct.stock}
           onChange={(e) =>
-            setNewProduct({ ...newProduct, stock: Math.max(0, e.target.value) })
+            setNewProduct({
+              ...newProduct,
+              stock: Math.max(0, parseInt(e.target.value) || 0),
+            })
           }
         />
 
@@ -248,14 +257,16 @@ function ProductsPage() {
                 <td>{p.category}</td>
                 <td>{p.stock}</td>
                 <td>
-                  {p.image && (
+                  {Array.isArray(p.images) && p.images.length > 0 ? (
                     <img
-                      src={p.image}
+                      src={p.images[0]}
                       alt={p.name}
                       width="50"
                       height="50"
                       style={{ objectFit: "cover" }}
                     />
+                  ) : (
+                    "No Image"
                   )}
                 </td>
                 <td>

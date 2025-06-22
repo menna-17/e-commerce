@@ -42,15 +42,25 @@ function AdminView() {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
+      const token = localStorage.getItem("token");
+
       axiosInstance
-        .delete(`/api/products/${id}`)
+        .delete(`/api/products/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then(() => {
           setProducts((prev) => prev.filter((product) => product._id !== id));
-          if (editId === id) setEditId(null); 
+          if (editId === id) setEditId(null);
         })
         .catch((err) => {
           console.error("Failed to delete product:", err);
-          alert("Error deleting product");
+          if (err.response?.status === 401) {
+            alert("Unauthorized: Please login as Admin or Seller.");
+          } else {
+            alert("Error deleting product");
+          }
         });
     }
   };
@@ -65,7 +75,6 @@ function AdminView() {
   };
 
   const handleSave = (id) => {
-
     axiosInstance
       .put(`/api/products/${id}`, editData)
       .then((res) => {
@@ -106,9 +115,7 @@ function AdminView() {
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Admin - Products</h1>
-      <table
-        className={`table table-bordered table-hover table-striped ${styles.table}`}
-      >
+      <table className={`table table-bordered table-hover table-striped ${styles.table}`}>
         <thead className={styles.tableHead}>
           <tr>
             <th>Name</th>
@@ -157,7 +164,6 @@ function AdminView() {
                   <td className={styles.tableCell}>{product.category}</td>
                 </>
               )}
-
               <td className={styles.tableCell}>
                 <div className={styles.actionButtons}>
                   {editId === product._id ? (
