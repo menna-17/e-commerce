@@ -29,7 +29,7 @@ const categories = [
 
 const Navbar = () => {
   const { language, changeLanguage } = useLanguage();
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const { user, logout } = useAuth();
   const cartCount = cart.length;
   const navigate = useNavigate();
@@ -204,8 +204,9 @@ const Navbar = () => {
                     <button
                       className={`dropdown-item ${styles.logoutItem}`}
                       onClick={() => {
-                        logout();
-                        navigate("/");
+                        logout(); 
+                        clearCart(); 
+                        navigate("/"); 
                       }}
                     >
                       {language === "ar" ? "تسجيل الخروج" : "Logout"}
